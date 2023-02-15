@@ -1,0 +1,80 @@
+Note 1: The Eye2Gene software is licensed to academic/not-for profit entities for any non-commercial/academic research use only under the terms of this licence.
+
+Note 2: For any other use of the Software not covered by the terms of this licence or where you are a commercial/for-profit entity wishing to use the Software for its non-commercial/academic research purposes, please contact info@uclb.com.
+Non-Commercial Licence For Eye2Gene software
+
+ ======================================
+
+This Agreement is made by and between the Licensor and the Licensee as defined and identified below.
+
+ 
+
+1 Definitions
+
+In this Agreement (“the Agreement”) the following words shall have the following meanings:
+
+ 
+
+Authors shall mean Dr Nikolas Pontikos and Dr William Woof.
+
+Licensee shall mean any academic/not-for-profit entity agreeing to use the Software for its non-commercial/academic research in accordance with these terms and conditions.
+
+Licensor shall mean University College London, incorporated by Royal Charter in the United Kingdom whose principal address is at Gower Street, London WC1E 6BT.
+
+Software shall mean the Eye2Gene  software.
+
+2 Licence
+
+2.1 Dr Nikolas Pontikos and Dr William Woof (during the course of their employment at UCL) jointly developed the Software. The Licensor has all copyright and rights in the nature of copyright subsisting in the Software. The Licensor grants the Licensee for the duration of this Agreement, a free of charge, non-exclusive, non-transferable copyright licence to use the Software for any non-commercial purpose only, including teaching and research at educational institutions, research at not-for-profit research institutions and for personal not-for-profit use, in accordance with the provisions of this Agreement. Non-commercial use expressly excludes any profit-making or commercial activities, including without limitation sale, licence, manufacture or development of commercial products, use in commercially-sponsored research, provision of consulting service, use for or on behalf of any commercial entity, and use in research where a commercial party obtains rights to research results or any other benefit. Any use of the Software for any purpose other than non-commercial research shall automatically terminate this Licence.
+
+2.2 The Licensee is permitted to make modifications to the Software provided that distribution of such modifications is in accordance with Clause 3.
+
+2.3 Except as expressly permitted by this Agreement and save to the extent and in the circumstances expressly required to be permitted by law, the Licensee is not permitted to rent, lease, sell, offer to sell or loan the Software or its associated documentation.
+
+2.4 In the event that the Licensee or a Recipient (as defined in clause 3.4) wishes to use the Software for any commercial purposes, the Licensee or the Recipient (as the case may be) and the Licensor shall discuss and negotiate in good faith the terms of a commercial licence in this regard.
+
+3 Redistribution and modifications
+
+3.1 The Licensee may reproduce and distribute copies of the Software with or without modifications, in source format only and provided that any and every distribution is accompanied by an unmodified copy of this Licence and that the following copyright notice is always displayed in an obvious manner: Copyright © UCL 2021. All rights reserved.
+
+3.2 In the case where the Software has been modified, any distribution must include prominent notices indicating which files have been changed.
+
+3.3 The Licensee shall cause any work that it distributes or publishes, that in whole or in part contains or is derived from the Software or any part thereof (“Work based on the Software”), to be licensed as a whole at no charge to all third parties under the terms of this Licence.
+
+3.4 Each time the Licensee re-distributes the Software or any Work based on the Software, the recipient thereof (“Recipient”) automatically receives a licence from the Licensor and agrees to copy, use, distribute, or modify the Software subject to these terms and conditions. The Licensee may not impose any further restrictions on the Recipient’s exercise of the rights granted herein. The Licensee shall not be responsible for enforcing compliance by third parties to this Licence, however, the Licensee shall ensure that the Recipient is not any commercial/for-profit entity.
+
+4 Duration
+
+This Agreement is effective for a period of two (2) years. It will also terminate automatically if the Licensee fails to abide by the terms of the Licence. Upon automatic termination the Licensee agrees to destroy all copies of the Software and its documentation.
+
+5 Warranties/Disclaimer of Warranties
+
+5.1 The Licensee warrants and represents that it is an academic/not-for-profit entity and that it shall use the Licence for its non-commercial/academic research purposes only.
+
+5.2 The Software is provided by the Licensor as is. To the maximum extent permitted by law, Licensor provides no warranties or conditions of any kind, either express or implied, including without limitation, any warranties or condition of title, non-infringement or fitness for a particular purpose.
+
+6 Limitation of Liability
+
+In no event shall the Licensor and/or Authors be liable for any direct, indirect, incidental, special, exemplary or consequential damages (including but not limited to, procurement of substitute goods or services; loss of use, data or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of this Software, even if advised of the possibility of such damage.
+
+7 Indemnity
+
+The Licensee or a Recipient (as the case may be) shall indemnify the Licensor and/or Authors against all third party claims that may be asserted against or suffered by the Licensor and/or Authors and which relate to use of the Software by the Licensee or the Recipient.
+
+8 Intellectual Property
+
+8.1 Copyright and all other intellectual property rights subsisting in or in connection with the Software and supporting information shall remain at all times the property of the Licensor. The Licensee shall acquire no rights in any such material except as expressly provided in this Agreement.
+
+8.2 No permission is granted to use the trademarks or product names of the Licensor except as required for reasonable and customary use in describing the origin of the Software and for the purposes of abiding by the terms of Clause 3.1.
+
+8.3 The Licensee or a Recipient (as applicable) shall promptly notify the Licensor, in sufficient detail, all improvements and new uses of the Software (“Improvements”). The Licensor (including any affiliate of UCL) shall have a non-exclusive, fully paid-up, royalty-free, irrevocable and perpetual licence under the Improvements for non-commercial academic research and teaching purposes. 
+
+8.4 The Licensee or a Recipient (as applicable) grants an exclusive first option to the Licensor to be exercised by the Licensor within three (3) years of the date of notification of the Improvements under Clause 8.3 to use any Improvements for commercial purposes on terms to be negotiated and agreed by the parties in good faith within a period of six (6) months from the date of exercise of the said option (including without limitation any royalty share in net income from such commercialization payable to the Licensee or a Recipient, as the case may be).
+
+9 Acknowledgements
+
+The Licensee shall acknowledge the Authors and use of the Software in the publication of any work that uses, or results that are achieved through, the use of the Software. The following citation shall be included in the acknowledgement: “Pontikos, N., Woof, W., et al. (2022). Eye2Gene: prediction of causal inherited retinal disease gene from multimodal imaging using deep-learning. https://doi.org/10.21203/rs.3.rs-2110140/v1”
+
+10 Governing Law
+
+This Agreement shall be governed by, construed and interpreted in accordance with English law and the parties submit to the exclusive jurisdiction of the English courts.
