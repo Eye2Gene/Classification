@@ -1,0 +1,5 @@
+keras
+numpy
+tensorflow>=2.2.0
+pandas
+sklearn

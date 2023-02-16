@@ -1,0 +1,8 @@
+{
+"augmentations": {
+    "samplewise_center": false,
+    "samplewise_std_normalization": false,
+    "brightness_range": [ 0.5, 1.5 ],
+    "horizontal_flip": true
+    }
+}
