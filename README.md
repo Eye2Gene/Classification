@@ -18,7 +18,7 @@ It is highly recommended you use a GPU-enabled tensorflow installation.
 
 Data must be a directory where each folder corresponds to a different class, or can be supplied as a CSV file with columns `file.path` containing a list of filepaths to the relevant images, and `gene` containing the classname of the label of that particular image. In general we recommend the use of CSVs for dataset control, but there is support for both options.
 
-We have provided some exmple synthetic data, which you can download by running [TODO], and some example CSVs pointing to this data. 
+We have provided some exmple synthetic data, which you can download by running `python bin/download_synthetic_dataset.py`, and some example CSVs pointing to this data. 
 
 You can also specify a JSON config file, for which we have provided some commonly used configurations from our experiments.
 
@@ -94,4 +94,8 @@ optional arguments:
   --embeddings          Location to save a .npy file of the activations of the penultimate model layer
   --no-softmax          Set to output the pre-softmax model predictions instead
 ```
+
+# Processing
+
+We have included the predictions of Eye2Gene on our internal and extternal datasets in the `results` folder, as well as a notebook showing how we process these results to get our metrics such as accuracy/AUROC/etc.
 
