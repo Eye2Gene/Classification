@@ -5,12 +5,12 @@ Class to contain a Keras VGG16 model
 from tensorflow.keras.applications.vgg16 import VGG16 as keras_VGG16
 from tensorflow.keras.layers import Dropout, Dense, Flatten
 from tensorflow.keras.optimizers import SGD
-from tensorflow.keras.models import Model as kModel
+from tensorflow.keras.models import Model
 
-from .base import Model
+from .base import ModelBase
 
 
-class VGG16(Model):
+class VGG16(ModelBase):
     ''' VGG16 Model class '''
 
     def __init__(self, model_config):
@@ -40,7 +40,7 @@ class VGG16(Model):
         x = Dropout(self.dropout)(x)
         x = Dense(len(self.classes), activation='softmax')(x)
 
-        self.model = kModel(inputs=self.model.input, outputs=x)
+        self.model = Model(inputs=self.model.input, outputs=x)
 
     def compile(self):
         ''' Compile the model using an optimiser (gradient descent method) '''

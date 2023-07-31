@@ -24,18 +24,30 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.summary import create_file_writer as FileWriter
 
 from .data import load_data
+from models import register_model
 from models.learning_rates import PolynomialDecay
 
 #import tensorflow as tf
 #from tensorflow.compat.v1.keras.backend import get_session
 #tf.compat.v1.disable_v2_behavior()
 
-model_defaults = {
+class RegisterModels(type):
+    def __init__(cls, name, bases, attrs):
+        super().__init__(name, bases, attrs)
+        register_model(name, cls)
+        #if not hasattr(cls, 'registered_models'):
+        #    cls.registered_models = {}
+        #cls.registered_models[name] = cls
+
+class ModelBase(metaclass=RegisterModels):
+    """ Base class for a Model """
+    
+    config_defaults = {
         'augmentations': {},
         'batch_size': 32,
         'classes': ['ABCA4', 'USH2A'],
         'data_dir': None,
-        'dataseries_path': 'file.path',
+        'dataseries_path': 'file_path',
         'dataseries_label': 'gene',
         'dropout': 0.0, 
         'epochs': 10,
@@ -51,17 +63,19 @@ model_defaults = {
         'workers': 8,
         'seed': 123
     }
+    
+    registered_models = {}
+    @classmethod
+    def list_models(cls):
+        return cls.registered_models
 
-class Model:
-    """ Base class for a Model """
-
-    def __init__(self, model_config={}):
+    def __init__(self, **model_config):
         # Set up variables
         self.name = 'base'
-        self._config = copy.deepcopy(model_defaults)
+        self._config = copy.deepcopy(self.config_defaults)
         self._config.update(model_config) # Save raw config
-        for k, v in self._config.items():
-            setattr(self, k, v)
+        #for k, v in self._config.items():
+        #    setattr(self, k, v)
 
         self.callbacks = list()
 
@@ -274,7 +288,7 @@ class Model:
         return history
         
 
-    def predict(self, x_test, return_labels=False, **kwargs):
+    def predict(self, x_test, return_labels=False, return_filepaths=False **kwargs):
         """ Generate prediction for single image """
         #print('Predicting not implemented for', self.name)
         if isinstance(x_test, str):
@@ -285,9 +299,15 @@ class Model:
             
         if return_labels:
             true_labels = generator.classes
-            return predictions, true_labels
+            if return_filenames:
+                return predictions, true_labels, generator.filenames
+            else:
+                return predictions, true_labels
         else:
-            return predictions
+            if return_filenames:
+                return predictions, generator.filenames
+            else:
+                return predictions
             
 
     def evaluate(self):

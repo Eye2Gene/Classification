@@ -3,14 +3,14 @@ Class to contain a Keras InceptionResnetV2 model
 """
 from tensorflow.keras.layers import Dropout, Dense
 from tensorflow.keras.optimizers import RMSprop
-from tensorflow.keras.models import Model as kModel
+from tensorflow.keras.models import Model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.applications.inception_resnet_v2 import InceptionResNetV2
 
-from .base import Model
+from .base import ModelBase
 
 # Class to hold Inception_ResnetV2
-class InceptionResnetV2(Model):
+class InceptionResnetV2(ModelBase):
     ''' InceptionResnetV2 model '''
 
     def __init__(self, model_config):
@@ -37,4 +37,4 @@ class InceptionResnetV2(Model):
         x = self.model.output
         x = Dropout(self.dropout)(x)
         x = Dense(len(self.classes), activation='softmax')(x)
-        self.model = kModel(self.model.input, x)
+        self.model = Model(self.model.input, x)

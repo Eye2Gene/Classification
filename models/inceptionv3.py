@@ -5,11 +5,11 @@ Class to contain an InceptionV3 Keras model
 from tensorflow.keras.layers import Dropout, Dense
 from tensorflow.keras.applications import InceptionV3 as kInceptionV3
 from tensorflow.keras.applications.inception_v3 import preprocess_input
-from tensorflow.keras.models import Model as kModel
+from tensorflow.keras.models import Model
 
-from .base import Model
+from .base import ModelBase
 
-class InceptionV3(Model):
+class InceptionV3(ModelBase):
     ''' InceptionV3 Model class '''
 
     def __init__(self, model_config):
@@ -37,4 +37,4 @@ class InceptionV3(Model):
         x = self.model.output
         x = Dropout(self.dropout)(x)
         x = Dense(len(self.classes), activation='softmax')(x)
-        self.model = kModel(self.model.input, x)
+        self.model = Model(self.model.input, x)

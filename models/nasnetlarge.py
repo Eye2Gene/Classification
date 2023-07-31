@@ -4,11 +4,11 @@ Class to contain a NASNetLarge Keras model
 
 from tensorflow.keras.layers import Dropout, Dense
 from tensorflow.keras.applications import NASNetLarge as kNASNetLarge
-from tensorflow.keras.models import Model as kModel
+from tensorflow.keras.models import Model
 
-from .base import Model
+from .base import ModelBase
 
-class NASNetLarge(Model):
+class NASNetLarge(ModelBase):
     ''' NASNetLarge Model class '''
 
     def __init__(self, model_config):
@@ -36,4 +36,4 @@ class NASNetLarge(Model):
         x = self.model.output
         x = Dropout(self.dropout)(x)
         x = Dense(len(self.classes), activation='softmax')(x)
-        self.model = kModel(self.model.input, x)
+        self.model = Model(self.model.input, x)

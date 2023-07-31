@@ -3,29 +3,33 @@ import numpy as np
 import sys
 
 import tensorflow as tf
-tf.compat.v1.enable_eager_execution() 
+#tf.compat.v1.enable_eager_execution() 
 
 #Hack to get relative import working
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-from models.base import Model
 
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('image_dir')
-    parser.add_argument('model')
-    parser.add_argument('--npy')
-    parser.add_argument('--csv')
-    parser.add_argument('--embedding')
+    parser.add_argument('model', help='Path to model h5 file')
+    parser.add_argument('--npy', help='Save a Numpy array with columns for the individual class predictions at the specified path')
+    parser.add_argument('--csv', help='Save a CSV with columns for the individual class predictions at the specified path')
+    parser.add_argument('--embedding', help='Store the raw embeddings before the final layer at the specified path')
     parser.add_argument('--no-softmax', action='store_true')
-
+    parser.add_argument('--gpu', type=str, default="0")
+    
     args = parser.parse_args()
+    
+    import os
+    os.environ["CUDA_VISIBLE_DEVICES"]=args.gpu
 
     model_path = args.model
     data_path = args.image_dir
 
     print('Loading model from ', model_path)
-    model = Model().load(model_path)
+    from models import load_model
+    model = load_model(model_path)
 
     print('Model loaded')
     print(model._config)
@@ -34,16 +38,18 @@ if __name__ == "__main__":
         model.model.layers[-1].activation = None
 
     print('## Evaluating on test data ##')
-    prediction, labels = model.predict(data_path, return_labels=True)
-    prediction_class = prediction.argmax(axis=-1)
-
-    correct = (prediction_class == labels).sum()
+    prediction, labels, filenames = model.predict(data_path,
+                                                  return_labels=True,
+                                                  return_filenmmes=True)
+    
+    pred_class = prediction.argmax(axis=-1)
+    correct = (pred_class == labels)
     total = len(labels)
 
-    print('Percentage correct (manual): {:.2f}, {}/{}'.format((correct / total * 100), correct, total))
+    print('Accuracy: {:.2f}, {}/{}'.format(correct.mean() * 100, correct.sum(), total))
 
     if args.npy:
-        np.save(args.npy, {'prediction': prediction, 'true': labels, 'classes': sorted(model.classes)})
+        np.save(args.npy, {'file': filenames, 'prediction': prediction, 'true': labels, 'classes': sorted(model.classes)})
 
     if args.csv:
         if not data_path[-4:] == ".csv":
@@ -51,11 +57,16 @@ if __name__ == "__main__":
 
         import pandas as pd
         df = pd.read_csv(data_path)
-        df = df[ df[model._config['dataseries_label']].isin(model.classes) ]
-        df["pred.class"] = [ sorted(model.classes)[i] for i in prediction_class ] 
+        path_col = model._config['dataseries_path']
+        
+        df_pred = pd.DataFrame()
+        df_pred[path_col] = filenames
+        df_pred["pred_class"] = [ sorted(model.classes)[i] for i in pred_class ] 
         for i, cls in enumerate(sorted(model.classes)):
-            df["pred."+cls] = prediction[:,i]
-        df["pred.model"] = [ model_path ]*len(df)
+            df_pred["pred_"+cls] = prediction[:,i]
+        df_pred["pred_model"] = model_path
+        
+        df = pd.merge(df, df_pred, how='right', on=path_col)
         df.to_csv(args.csv, index=False)
 
     if args.embedding:

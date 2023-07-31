@@ -2,7 +2,6 @@
 Train various different architectures of neural network using Keras
 """
 
-
 import argparse
 import json
 import numpy as np
@@ -12,22 +11,7 @@ import sys
 import tensorflow as tf
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
-
-from models.vgg16 import VGG16
-from models.inception_resnetv2 import InceptionResnetV2
-from models.inceptionv3 import InceptionV3
-from models.custom import Custom
-from models.nasnetlarge import NASNetLarge
-
-model_choices = [
-    'vgg16',
-    'inception_resnetv2',
-    'inceptionv3',
-    'custom',
-    'nasnetlarge',
-]
 
 def parse_augs(augs):
     if not augs:
@@ -60,7 +44,7 @@ def parse_augs(augs):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('model', help='Name of model to train', choices=model_choices)
+    parser.add_argument('model', help='Name of model to train (enter invalid option to list)')
     parser.add_argument('--augmentations', help='Comma separated values containing augmentations e.g horitzontal_flip=True,zoom=0.3')
     parser.add_argument('--batch-size', help='Batch size', type=int)
     parser.add_argument('--classes', help='List of classes', nargs='+')
@@ -82,8 +66,12 @@ if __name__ == "__main__":
     parser.add_argument('--val-dir', help='Validation data (can be supplied if you do not want it taken from training data')
     parser.add_argument('--workers', type=int, help='Number of workers to use when training (multiprocessing)')
     parser.add_argument('--verbose', action='store_true', help='Verbose')
+    parser.add_argument('--gpu', type=str, default="0")
 
     args = parser.parse_args()
+    
+    import os
+    os.environ["CUDA_VISIBLE_DEVICES"]=args.gpu
     
     # TODO: Move to model description?
     defaults = {
@@ -91,7 +79,7 @@ if __name__ == "__main__":
         'batch_size': 32,
         'classes': ['ABCA4', 'USH2A'],
         'data_dir': None,
-        'dataseries_path': 'file.path',
+        'dataseries_path': 'file_path',
         'dataseries_label': 'gene',
         'dropout': 0.0, 
         'epochs': 10,
@@ -149,15 +137,11 @@ if __name__ == "__main__":
             print(e)
             exit(1)
     
-    
-    
     #if not args.data_dir:
     #    if not args.train_dir:
     #        print('Need to supply --train-dir')
     #        sys.exit(1)
-
-            
-            
+     
     # Set tf to grow into GPU memory, not pre-allocate
     gpus = tf.config.experimental.list_physical_devices('GPU')
 
@@ -167,13 +151,13 @@ if __name__ == "__main__":
 
     if args.verbose:
         print('GPUs: ', gpus)
-        
         print(model_config)
 
 
 
     # Create model
     
+    """
     if model_config['model_name'] == 'vgg16':
         model = VGG16(model_config)
     elif model_config['model_name'] == 'inception_resnetv2':
@@ -184,11 +168,20 @@ if __name__ == "__main__":
         model = Custom(model_config)
     elif model_config['model_name'] == 'nasnetlarge':
         model = NASNetLarge(model_config)
+    """
+    
+    from models import list_models, get_model
+    
+    modelcls = get_model(model_config['model_name'])
+    if modelcls:
+        model = modelcls(**model_config)
     else:
         print('Unknown/No model selected!')
+        print('\nAvailable models:')
+        for m in list_models():
+            print("-", m)
         sys.exit(1)
 
-    
 
     if args.verbose:
         model.print_summary()
