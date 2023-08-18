@@ -73,6 +73,9 @@ if __name__ == "__main__":
     import os
     os.environ["CUDA_VISIBLE_DEVICES"]=args.gpu
     
+    physical_devices = tf.config.experimental.list_physical_devices('GPU')
+    tf.config.experimental.set_memory_growth(physical_devices[0], True)
+    
     # TODO: Move to model description?
     defaults = {
         'augmentations': {},
@@ -174,7 +177,7 @@ if __name__ == "__main__":
     
     modelcls = get_model(model_config['model_name'])
     if modelcls:
-        model = modelcls(**model_config)
+        model = modelcls(model_config)
     else:
         print('Unknown/No model selected!')
         print('\nAvailable models:')

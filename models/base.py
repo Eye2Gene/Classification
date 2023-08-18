@@ -23,6 +23,11 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.summary import create_file_writer as FileWriter
 
+try:
+    import keras_cv_attention_models
+except:
+    print("keras_cv_attention_models not installed, this is needed for certain models")
+
 from .data import load_data
 from models import register_model
 from models.learning_rates import PolynomialDecay
@@ -69,13 +74,13 @@ class ModelBase(metaclass=RegisterModels):
     def list_models(cls):
         return cls.registered_models
 
-    def __init__(self, **model_config):
+    def __init__(self, model_config=dict()):
         # Set up variables
         self.name = 'base'
         self._config = copy.deepcopy(self.config_defaults)
         self._config.update(model_config) # Save raw config
-        #for k, v in self._config.items():
-        #    setattr(self, k, v)
+        for k, v in self._config.items():
+            setattr(self, k, v)
 
         self.callbacks = list()
 
@@ -259,7 +264,8 @@ class ModelBase(metaclass=RegisterModels):
         # Calc class weights
         counter = Counter(self.train_generator.classes)
         max_val = float(max(counter.values()))
-        class_weights = {class_id: max_val/num_images for class_id, num_images in counter.items()}
+        #class_weights = {class_id: max_val/num_images for class_id, num_images in counter.items()}
+        class_weights = {class_id: max_val/counter.get(class_id, 1.0) for class_id, _ in enumerate(self.classes)}
         print('Class weights:', class_weights)
             
         if not self.callbacks:
@@ -288,7 +294,7 @@ class ModelBase(metaclass=RegisterModels):
         return history
         
 
-    def predict(self, x_test, return_labels=False, return_filepaths=False **kwargs):
+    def predict(self, x_test, return_labels=False, return_filenames=False, **kwargs):
         """ Generate prediction for single image """
         #print('Predicting not implemented for', self.name)
         if isinstance(x_test, str):

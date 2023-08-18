@@ -40,7 +40,7 @@ if __name__ == "__main__":
     print('## Evaluating on test data ##')
     prediction, labels, filenames = model.predict(data_path,
                                                   return_labels=True,
-                                                  return_filenmmes=True)
+                                                  return_filenames=True)
     
     pred_class = prediction.argmax(axis=-1)
     correct = (pred_class == labels)

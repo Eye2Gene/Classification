@@ -15,7 +15,7 @@ def get_model(name):
 
 def load_model(model_path):
     from models.base import ModelBase
-    model = Model().load(model_path)
+    model = ModelBase().load(model_path)
     return model
 
 # Dynamically generate the class mapping
