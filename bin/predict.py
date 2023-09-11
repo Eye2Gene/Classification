@@ -66,7 +66,7 @@ if __name__ == "__main__":
             df_pred["pred_"+cls] = prediction[:,i]
         df_pred["pred_model"] = model_path
         
-        df = pd.merge(df, df_pred, how='right', on=path_col)
+        df = pd.merge(df, df_pred, how='outer', on=path_col)
         df.to_csv(args.csv, index=False)
 
     if args.embedding:

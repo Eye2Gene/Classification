@@ -201,12 +201,6 @@ if __name__ == "__main__":
     history = model.train(workers=model_config['workers'])
     print('## Training complete ##')
 
-    #print('## Check our training was ok by evaluating again on the validation data')
-    #score = model.predict_generator(model.val_generator)
-    #print(score)
-    #print('Val loss:', score[0])
-    #print('Val accuracy:', score[1])
-
     print('## Evaluating on test data##')
     score = model.evaluate()
     print('Validation loss:', score[0])

@@ -57,6 +57,7 @@ class ModelBase(metaclass=RegisterModels):
         'dropout': 0.0, 
         'epochs': 10,
         'input_shape': [256, 256],
+        'loss_fn': 'categorical_crossentropy',
         'lr': 1e-04,
         'lr_schedule_config': None,
         'lr_power': 1,
@@ -110,8 +111,8 @@ class ModelBase(metaclass=RegisterModels):
     def compile(self):
         ''' Sensible compile defaults '''
         
-        optimizer = Adam(lr=self.lr)
-        self.model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer=optimizer)
+        optimizer = Adam(learning_rate=self.lr) #Change to learning_rate=
+        self.model.compile(loss=self.loss_fn, metrics=['accuracy'], optimizer=optimizer)
 
     def get_generator(self, source, subset='training', use_split=False, fold=None, **kwargs):
     
