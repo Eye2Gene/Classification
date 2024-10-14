@@ -41,6 +41,6 @@ workflow {
         params.model, params.epochs,
         params.train_csv, params.val_csv,
         file(params.cfg_63), file(params.baf_cfg), file(params.mini_cfg),
-        params.images_data_dir, params.images_dir_in_csv
+        params.images_data_dir, params.images_dir_in_csv,
         params.gpu)
 }
