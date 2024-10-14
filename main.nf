@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 
 process trainModel {
-    container 'e2g-train'
+    container 'ghcr.io/eye2gene/e2g-train:latest'
     containerOptions '--gpus all'
     publishDir "${params.output_dir}", mode: 'copy'
 
