@@ -2,7 +2,7 @@
 
 process trainModel {
     container 'ghcr.io/eye2gene/e2g-train:latest'
-    containerOptions '-e NVIDIA_DRIVER_CAPABILITIES=compute,utility -e NVIDIA_VISIBLE_DEVICES=all --gpus all'
+    containerOptions ' --gpus all '
     publishDir "${params.output_dir}", mode: 'copy'
 
     input:
