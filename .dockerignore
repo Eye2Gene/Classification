@@ -1,15 +1,16 @@
-/.nextflow*
-/checkpoints/
-/logs/
-/trained_models/
-/work/
-/results
+**/.git
+**/.nextflow*
+**/checkpoints/
+**/logs/
+**/trained_models/
+**/work/
+
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
-__pycache__/
+**/__pycache__/
 *.py[cod]
 *$py.class
 
@@ -120,7 +121,7 @@ ipython_config.py
 .pdm.toml
 
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
-__pypackages__/
+**/__pypackages__/
 
 # Celery stuff
 celerybeat-schedule
@@ -149,7 +150,7 @@ venv.bak/
 /site
 
 # mypy
-.mypy_cache/
+**/.mypy_cache/
 .dmypy.json
 dmypy.json
 
@@ -174,7 +175,7 @@ cython_debug/
 poetry.toml
 
 # ruff
-.ruff_cache/
+**/.ruff_cache/
 
 # LSP config files
 pyrightconfig.json
