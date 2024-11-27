@@ -13,9 +13,6 @@ process trainModel {
     val epochs
     path train_csv
     path val_csv
-    path cfg_63
-    path baf_cfg
-    path mini_cfg
     path "image_data" // mount images_data_dir as "image_data"
     val images_dir_in_csv
     val gpu
@@ -37,7 +34,7 @@ process trainModel {
     fi
 
     echo "Debug: Checking CUDA and GPU"
-    nvidia-smi
+    nvidia-smi 
     echo "Debug: CUDA version:"
     nvcc --version
     echo "Debug: Checking for libcuda.so:"
@@ -65,7 +62,7 @@ process trainModel {
         --epochs $epochs \
         --train-dir $train_csv \
         --val-dir $val_csv \
-        --cfg $cfg_63 $baf_cfg $mini_cfg \
+        --cfg /app/configs/63class.json /app/configs/augmentations_baf.json /app/configs/hparam_set_6b_mini.json \
         --gpu $gpu
 
     echo "Debug: Training script completed"
@@ -76,7 +73,6 @@ workflow {
     trainModel(
         params.model, params.epochs,
         params.train_csv, params.val_csv,
-        params.cfg_63, params.baf_cfg, params.mini_cfg,
         params.images_data_dir, params.images_dir_in_csv,
         params.gpu)
 }
