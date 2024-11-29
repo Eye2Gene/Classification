@@ -82,10 +82,11 @@ export AWS_SECRET_ACCESS_KEY="..."
 export AWS_SESSION_TOKEN="..."
 
 # Run on Eye2Gene Main Account
-nextflow run main.nf -c nextflow.config -c aws_params.config -profile eye2gene_main -resume -with-tower
-nextflow run main.nf -c nextflow.config -c aws_params.config -profile eye2gene_site1 -resume -with-tower
-nextflow run main.nf -c nextflow.config -c aws_params.config -profile eye2gene_site2 -resume -with-tower
-nextflow run main.nf -c nextflow.config -c aws_params.config -profile eye2gene_site3 -resume -with-tower
+curl -LO https://raw.githubusercontent.com/Eye2Gene/Classification/refs/heads/main/aws_params.config
+nextflow run Eye2Gene/Classification -r main -c aws_params.config -profile eye2gene_main -resume -with-tower
+nextflow run Eye2Gene/Classification -r main -c aws_params.config -profile eye2gene_site1 -resume -with-tower
+nextflow run Eye2Gene/Classification -r main -c aws_params.config -profile eye2gene_site2 -resume -with-tower
+nextflow run Eye2Gene/Classification -r main -c aws_params.config -profile eye2gene_site3 -resume -with-tower
 ```
 
 ### Check the nodes created
