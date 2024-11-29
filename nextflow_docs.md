@@ -1,5 +1,7 @@
 # Development
 
+
+
 ## Release a new Docker build
 
 The pipeline uses docker images on Github Docker Registry. If you make any changes to the underlying files including in the dockerfile, please push them to Dockerhub:
@@ -75,27 +77,18 @@ Succeeded   : 1
 export TOWER_ACCESS_TOKEN=...
 
 # get AWS credentials from https://eye2gene.awsapps.com/start/#
+export AWS_ACCESS_KEY_ID="..."
+export AWS_SECRET_ACCESS_KEY="..."
+export AWS_SESSION_TOKEN="..."
 
 # use the latest nextflow version possible
-time nextflow run main.nf -c nextflow.config -c aws_params.config
+# Run on Eye2Gene Main Account
+nextflow run main.nf -c nextflow.config -c aws_params.config -p eye2gene_main
+nextflow run main.nf -c nextflow.config -c aws_params.config -p eye2gene_site1
+nextflow run main.nf -c nextflow.config -c aws_params.config -p eye2gene_site2
+nextflow run main.nf -c nextflow.config -c aws_params.config -p eye2gene_site3
 
- N E X T F L O W   ~  version 24.10.0
-
-Launching `main.nf` [nauseous_swirles] DSL2 - revision: 13acb23d5f
-
-Monitor the execution with Seqera Platform using this URL: https://cloud.seqera.io/user/alanwilter/watch/1W0o3ubIRudBDz
-executor >  awsbatch (fusion enabled) (1)
-[40/888598] process > trainModel [100%] 1 of 1 ✔
-Completed at: 29-Oct-2024 18:17:27
-Duration    : 11m 21s
-CPU hours   : 0.1
-Succeeded   : 1
-
-
-nextflow run main.nf -c nextflow.config -c aws_params.config 32.01s user 2.71s system 4% cpu 12:03.55 total
 ```
-
-Results are seen at `s3://eye2gene-main/out/1/trained_models/`
 
 ### Check the nodes created
 
