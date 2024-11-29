@@ -80,13 +80,13 @@ export TOWER_ACCESS_TOKEN=...
 export AWS_ACCESS_KEY_ID="..."
 export AWS_SECRET_ACCESS_KEY="..."
 export AWS_SESSION_TOKEN="..."
-
+export AWS_REGION=eu-west-2
 # use the latest nextflow version possible
 # Run on Eye2Gene Main Account
-nextflow run main.nf -c nextflow.config -c aws_params.config -p eye2gene_main
-nextflow run main.nf -c nextflow.config -c aws_params.config -p eye2gene_site1
-nextflow run main.nf -c nextflow.config -c aws_params.config -p eye2gene_site2
-nextflow run main.nf -c nextflow.config -c aws_params.config -p eye2gene_site3
+nextflow run main.nf -c nextflow.config -c aws_params.config -profile eye2gene_main -resume -with-tower
+nextflow run main.nf -c nextflow.config -c aws_params.config -profile eye2gene_site1 -resume -with-tower
+nextflow run main.nf -c nextflow.config -c aws_params.config -profile eye2gene_site2 -resume -with-tower
+nextflow run main.nf -c nextflow.config -c aws_params.config -profile eye2gene_site3 -resume -with-tower
 
 ```
 
