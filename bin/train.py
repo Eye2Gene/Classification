@@ -210,21 +210,8 @@ if __name__ == "__main__":
     model.compile()
     print('## Training on train data ##')
 
-    # Define the ModelCheckpoint callback
-    checkpoint_callback = ModelCheckpoint(
-    filepath=weight_file,
-    monitor='val_loss',          # Monitor validation loss
-    save_best_only=True,         # Save only if the monitored metric improves
-    save_weights_only=True,      # Save only the weights, not the entire model
-    mode='min',                  # Save when 'val_loss' is minimized
-    verbose=1                    # Print message when saving weights
-    )
     history = model.train(workers=model_config['workers'],
-                          callbacks=[checkpoint_callback]
                           )
-
-    # model.save(weight_file)
-    print(f"Model weights saved to {weight_file}")
 
     # Save training history
     os.makedirs(model_config['model_log_dir'], exist_ok=True)
@@ -232,6 +219,11 @@ if __name__ == "__main__":
     history_df = pd.DataFrame(history.history)
     history_df.to_csv(history_file, index=False)
     print(f"Training history saved to {history_file}")
+
+    # Save model weights
+    os.makedirs(model_config['model_save_dir'], exist_ok=True)
+    model.save(weight_file)
+    print(f"Model weights saved to {weight_file}")
 
     print('## Training complete ##')
 
