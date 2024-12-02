@@ -210,7 +210,7 @@ if __name__ == "__main__":
 
     # Save model weights
     os.makedirs(model_config['model_save_dir'], exist_ok=True)
-    model.save_weights(weight_file)
+    model.save(weight_file)
     print(f"Model weights saved to {weight_file}")
 
     # Save training history
