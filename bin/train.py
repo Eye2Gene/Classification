@@ -7,10 +7,9 @@ import json
 import numpy as np
 import os
 import random
-import pandas as pd
 import sys
 import tensorflow as tf
-
+from tensorflow.keras.callbacks import ModelCheckpoint
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
@@ -203,14 +202,28 @@ if __name__ == "__main__":
         print('## Generating preview data ##')
         model.generate_preview()
         sys.exit(1)
-    # Training
-    model.compile()
-    print('## Training on train data ##')
-    history = model.train(workers=model_config['workers'])
 
     # Save model weights
     os.makedirs(model_config['model_save_dir'], exist_ok=True)
-    model.save(weight_file)
+    
+    # Training
+    model.compile()
+    print('## Training on train data ##')
+
+    # Define the ModelCheckpoint callback
+    checkpoint_callback = ModelCheckpoint(
+    filepath=weight_file,
+    monitor='val_loss',          # Monitor validation loss
+    save_best_only=True,         # Save only if the monitored metric improves
+    save_weights_only=True,      # Save only the weights, not the entire model
+    mode='min',                  # Save when 'val_loss' is minimized
+    verbose=1                    # Print message when saving weights
+    )
+    history = model.train(workers=model_config['workers'],
+                          callbacks=[checkpoint_callback]
+                          )
+
+    # model.save(weight_file)
     print(f"Model weights saved to {weight_file}")
 
     # Save training history
