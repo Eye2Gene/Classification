@@ -9,7 +9,8 @@ import os
 import random
 import sys
 import tensorflow as tf
-from tensorflow.keras.callbacks import ModelCheckpoint
+import pandas as pd
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
