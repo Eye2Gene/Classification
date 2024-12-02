@@ -7,6 +7,7 @@ import json
 import numpy as np
 import os
 import random
+import pandas as pd
 import sys
 import tensorflow as tf
 
@@ -44,7 +45,7 @@ def parse_augs(augs):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('model', help='Name of model to train (enter invalid option to list)')
+    parser.add_argument('--model',default='inceptionv3', help='Name of model to train (enter invalid option to list)')
     parser.add_argument('--augmentations', help='Comma separated values containing augmentations e.g horitzontal_flip=True,zoom=0.3')
     parser.add_argument('--batch-size', help='Batch size', type=int)
     parser.add_argument('--classes', help='List of classes', nargs='+')
@@ -174,6 +175,15 @@ if __name__ == "__main__":
     """
     
     from models import list_models, get_model
+
+    # Check for local weights
+    weight_file = os.path.join(model_config['model_save_dir'], 'model_weights.h5')
+    if not args.no_weights and os.path.exists(weight_file):
+        print(f"Loading local weights from {weight_file}")
+        model_config['use_imagenet_weights'] = False
+    elif not args.no_weights:
+        print("Using pretrained ImageNet weights.")
+        model_config['use_imagenet_weights'] = True
     
     modelcls = get_model(model_config['model_name'])
     if modelcls:
@@ -193,15 +203,26 @@ if __name__ == "__main__":
         print('## Generating preview data ##')
         model.generate_preview()
         sys.exit(1)
-
+    # Training
     model.compile()
     print('## Training on train data ##')
-    
-    model.save_config()
     history = model.train(workers=model_config['workers'])
+
+    # Save model weights
+    os.makedirs(model_config['model_save_dir'], exist_ok=True)
+    model.save_weights(weight_file)
+    print(f"Model weights saved to {weight_file}")
+
+    # Save training history
+    os.makedirs(model_config['model_log_dir'], exist_ok=True)
+    history_file = os.path.join(model_config['model_log_dir'], 'training_history.csv')
+    history_df = pd.DataFrame(history.history)
+    history_df.to_csv(history_file, index=False)
+    print(f"Training history saved to {history_file}")
+
     print('## Training complete ##')
 
-    print('## Evaluating on test data##')
+    print('## Evaluating on test data ##')
     score = model.evaluate()
     print('Validation loss:', score[0])
     print('Validation accuracy:', score[1])
