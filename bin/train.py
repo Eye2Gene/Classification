@@ -120,6 +120,16 @@ if __name__ == "__main__":
     if args.model: model_config['model_name'] = args.model
     model_config['use_imagenet_weights'] = (not args.no_weights)
 
+    # Check for local weights
+    weight_file = os.path.join(model_config['model_save_dir'], 'model_weights.h5')
+    if not args.no_weights and os.path.exists(weight_file):
+        print(f"Loading local weights from {weight_file}")
+        model_config['use_imagenet_weights'] = False
+    elif not args.no_weights:
+        print("Using pretrained ImageNet weights.")
+        model_config['use_imagenet_weights'] = True
+
+
     # Parse lr schedule
     if args.lr_schedule == 'poly':
         model_config['lr_schedule_config'] = {
@@ -177,15 +187,6 @@ if __name__ == "__main__":
     """
 
     from models import list_models, get_model
-
-    # Check for local weights
-    weight_file = os.path.join(model_config['model_save_dir'], 'model_weights.h5')
-    if not args.no_weights and os.path.exists(weight_file):
-        print(f"Loading local weights from {weight_file}")
-        model_config['use_imagenet_weights'] = False
-    elif not args.no_weights:
-        print("Using pretrained ImageNet weights.")
-        model_config['use_imagenet_weights'] = True
 
     modelcls = get_model(model_config['model_name'])
     if modelcls:
