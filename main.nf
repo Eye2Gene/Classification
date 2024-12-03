@@ -2,6 +2,7 @@
 
 process trainModel {
     container 'ghcr.io/eye2gene/e2g-train:latest'
+    // container 'eye2gene/e2g-train'
     containerOptions "--gpus all"
     accelerator 1
     memory '16 GB'
@@ -13,8 +14,7 @@ process trainModel {
     val epochs
     path train_csv
     path val_csv
-    path model_save_dir
-    path load_weights_path, arity: '0..1' // optional
+    path load_weights_h5_path
     path cfg_63
     path baf_cfg
     path mini_cfg
@@ -24,21 +24,24 @@ process trainModel {
 
     output:
     path 'trained_models/*'
+    path "checkpoints/*"
+    path "logs/*"
 
     script:
-    def extra_args = load_weights_path ? "--load-weights-path $load_weights_path" : ""
+    def tmp = ['--load-weights-path']
+    if (load_weights_h5_path) tmp.add(load_weights_h5_path[0])
+    def extra_args = tmp.join(' ')
     """
     echo "Debug: Updating CSV files"
     # Update paths in CSV files
     sed -i 's|${images_dir_in_csv}|./image_data/|g' $train_csv
     sed -i 's|${images_dir_in_csv}|./image_data/|g' $val_csv
 
+    mkdir -p trained_models
+
     echo "Debug: Starting training script"
-    python3 /app/bin/train.py $model \
-        --model-save-dir $model_save_dir \
-        --epochs $epochs \
-        --train-dir $train_csv \
-        --val-dir $val_csv \
+    python3 /app/bin/train.py $model --model-save-dir trained_models \
+        --epochs $epochs --train-dir $train_csv --val-dir $val_csv \
         --cfg $cfg_63 $baf_cfg $mini_cfg \
         --gpu $gpu $extra_args
 
@@ -47,10 +50,10 @@ process trainModel {
 }
 
 workflow {
+    load_paths = params.load_weights_h5_path != '' ? [params.load_weights_h5_path] : []
     trainModel(
         params.model, params.epochs,
-        params.train_csv, params.val_csv, params.model_save_dir,
-        params.load_weights_path,
+        params.train_csv, params.val_csv, load_paths,
         params.cfg_63, params.baf_cfg, params.mini_cfg,
         params.images_data_dir, params.images_dir_in_csv,
         params.gpu)

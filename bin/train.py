@@ -69,6 +69,7 @@ if __name__ == "__main__":
     parser.add_argument('--workers', type=int, help='Number of workers to use when training (multiprocessing)')
     parser.add_argument('--verbose', action='store_true', help='Verbose')
     parser.add_argument('--gpu', type=str, default="0")
+    parser.add_argument('--seed', type=int, help='Seed Number')
 
     args = parser.parse_args()
 
