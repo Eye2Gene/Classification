@@ -13,6 +13,7 @@ process trainModel {
     val epochs
     path train_csv
     path val_csv
+    path model_save_dir
     path cfg_63
     path baf_cfg
     path mini_cfg
@@ -62,6 +63,7 @@ process trainModel {
 
     echo "Debug: Starting training script"
     python3 /app/bin/train.py $model \
+        --model-save-dir $model_save_dir \
         --epochs $epochs \
         --train-dir $train_csv \
         --val-dir $val_csv \
@@ -75,7 +77,7 @@ process trainModel {
 workflow {
     trainModel(
         params.model, params.epochs,
-        params.train_csv, params.val_csv,
+        params.train_csv, params.val_csv, params.model_save_dir,
         params.cfg_63, params.baf_cfg, params.mini_cfg,
         params.images_data_dir, params.images_dir_in_csv,
         params.gpu)
