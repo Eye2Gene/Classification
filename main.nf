@@ -25,37 +25,6 @@ process trainModel {
     path 'trained_models/*'
 
     """
-    echo "Debug: Starting trainModel process"
-    echo "Debug: Current working directory: \$(pwd)"
-    echo "Debug: Listing current directory contents:"
-    ls -la
-
-    echo "Debug: Checking if running in Docker"
-    if [ -f /.dockerenv ]; then
-        echo "Debug: Running inside Docker"
-    else
-        echo "Debug: Not running inside Docker"
-    fi
-
-    echo "Debug: Checking CUDA and GPU"
-    nvidia-smi
-    echo "Debug: CUDA version:"
-    nvcc --version
-    echo "Debug: Checking for libcuda.so:"
-    ldconfig -p | grep libcuda
-    echo "Debug: Checking LD_LIBRARY_PATH:"
-    echo \$LD_LIBRARY_PATH
-
-    echo "Debug: Python and TensorFlow versions:"
-    python3 --version
-    python3 -c "import tensorflow as tf; print(tf.__version__)"
-
-    echo "Debug: TensorFlow GPU availability:"
-    python3 -c "import tensorflow as tf; print(tf.test.is_built_with_cuda()); print(tf.test.is_gpu_available())"
-
-    mkdir -p trained_models
-    echo "Debug: Created trained_models directory"
-
     echo "Debug: Updating CSV files"
     # Update paths in CSV files
     sed -i 's|${images_dir_in_csv}|./image_data/|g' $train_csv

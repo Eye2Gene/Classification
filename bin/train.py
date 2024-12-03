@@ -102,12 +102,14 @@ if __name__ == "__main__":
 
     model_config = defaults.copy()
 
+    # Overwrite the above defaults with any config files
     if args.cfg:
         for cfg_file in args.cfg:
             with open(cfg_file, 'r') as f:
                 cfg = json.load(f)
             model_config.update(cfg)
 
+    # Overwrite the above defaults with the command line arguments
     no_arg = [ 'augemntations', 'cfg', 'model', 'no-weights', 'preview' ]
     arg_dict = vars(args)
     for k, v in arg_dict.items():
