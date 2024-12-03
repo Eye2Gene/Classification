@@ -45,7 +45,7 @@ def parse_augs(augs):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('model', default='inceptionv3', help='Name of model to train (enter invalid option to list)')
+    parser.add_argument('model', help='Name of model to train (enter invalid option to list)')
     parser.add_argument('--augmentations', help='Comma separated values containing augmentations e.g horitzontal_flip=True,zoom=0.3')
     parser.add_argument('--batch-size', help='Batch size', type=int)
     parser.add_argument('--classes', help='List of classes', nargs='+')
@@ -58,7 +58,6 @@ if __name__ == "__main__":
     parser.add_argument('--lr-schedule', choices=['linear', 'poly'], help='Learning rate scheduler')
     parser.add_argument('--lr-power', type=int, help='Power of lr decay, only used when using polynomial learning rate scheduler', default=1)
     parser.add_argument('--load-weights-path', help='Load model weights from file to start training from')
-    parser.add_argument('--save-weights-path', default='trained_model.weights.h5', help='Save final model weights to file, must end with .weights.h5')
     parser.add_argument('--model-save-dir', default='trained_models', help='Save location for trained models')
     parser.add_argument('--model-log-dir', default='logs', help='Save location for model logs (used by tensorboard)')
     parser.add_argument('--no-weights', action='store_true', help="Don't download and use any pretrained model weights, random init")
@@ -121,12 +120,6 @@ if __name__ == "__main__":
     # Manually parse remaining arguments
     if args.model: model_config['model_name'] = args.model
     model_config['use_imagenet_weights'] = (not args.no_weights)
-
-    # Check for local weights
-    weight_file = model_config['load_weights_path']
-    if os.path.exists(weight_file):
-        print(f"Loading local weights from {weight_file}")
-        model_config['use_imagenet_weights'] = False
 
     # Parse lr schedule
     if args.lr_schedule == 'poly':
@@ -196,6 +189,9 @@ if __name__ == "__main__":
             print("-", m)
         sys.exit(1)
 
+    if args.load_weights_path and os.path.exists(args.load_weights_path):
+        model.load(args.load_weights_path)
+        print(f"Loaded weights from {args.load_weights_path}")
 
     if args.verbose:
         model.print_summary()
@@ -210,8 +206,6 @@ if __name__ == "__main__":
 
     # Training
     model.compile()
-    if os.path.exists(weight_file):
-        model.load_weights(weight_file)
     print('## Training on train data ##')
 
     history = model.train(workers=model_config['workers'])
@@ -222,12 +216,6 @@ if __name__ == "__main__":
     history_df = pd.DataFrame(history.history)
     history_df.to_csv(history_file, index=False)
     print(f"Training history saved to {history_file}")
-
-    # Save model weights
-    os.makedirs(model_config['model_save_dir'], exist_ok=True)
-    saved_weight_file = model_config['save_weights_path']
-    model.save_weights(saved_weight_file)
-    print(f"Model weights saved to {saved_weight_file}")
 
     print('## Training complete ##')
 
