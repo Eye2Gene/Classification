@@ -380,14 +380,15 @@ class ModelBase(metaclass=RegisterModels):
             self.model.save(self.save_location())
             
             
-    def load(self, model_path):
-        config_path = model_path[:-3] + '.json'
-        with open(config_path, 'r') as config_file:
-            model_config = json.load(config_file)
-            
+
+    def load(self, model_path, update_config=True):
         #TODO: Set this so it prefers supplied config rather than saved config?
-        self._config.update(model_config)
-    
+        if update_config:
+            config_path = model_path[:-3] + '.json'
+            with open(config_path, 'r') as config_file:
+                model_config = json.load(config_file)
+
+            self._config.update(model_config)
         #if self.verbose:
         #    print('Loading model from ', model_path)
         self.model = load_model(model_path)

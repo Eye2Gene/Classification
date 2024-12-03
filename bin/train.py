@@ -190,7 +190,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     if args.load_weights_path and os.path.exists(args.load_weights_path):
-        model.load(args.load_weights_path)
+        model.load(args.load_weights_path, update_config=False)
         print(f"Loaded weights from {args.load_weights_path}")
 
     if args.verbose:
