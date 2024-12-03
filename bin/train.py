@@ -201,13 +201,13 @@ if __name__ == "__main__":
         model.generate_preview()
         sys.exit(1)
 
-    # Save model weights
     os.makedirs(model_config['model_save_dir'], exist_ok=True)
 
     # Training
     model.compile()
     print('## Training on train data ##')
 
+    model.save_config()
     history = model.train(workers=model_config['workers'])
 
     # Save training history
