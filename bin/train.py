@@ -45,7 +45,7 @@ def parse_augs(augs):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model', default='inceptionv3', help='Name of model to train (enter invalid option to list)')
+    parser.add_argument('model', default='inceptionv3', help='Name of model to train (enter invalid option to list)')
     parser.add_argument('--augmentations', help='Comma separated values containing augmentations e.g horitzontal_flip=True,zoom=0.3')
     parser.add_argument('--batch-size', help='Batch size', type=int)
     parser.add_argument('--classes', help='List of classes', nargs='+')
