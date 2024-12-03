@@ -14,6 +14,7 @@ process trainModel {
     path train_csv
     path val_csv
     path model_save_dir
+    path load_weights_path, arity: '0..1' // optional
     path cfg_63
     path baf_cfg
     path mini_cfg
@@ -24,6 +25,8 @@ process trainModel {
     output:
     path 'trained_models/*'
 
+    script:
+    def extra_args = load_weights_path ? "--load-weights-path $load_weights_path" : ""
     """
     echo "Debug: Updating CSV files"
     # Update paths in CSV files
@@ -37,7 +40,7 @@ process trainModel {
         --train-dir $train_csv \
         --val-dir $val_csv \
         --cfg $cfg_63 $baf_cfg $mini_cfg \
-        --gpu $gpu
+        --gpu $gpu $extra_args
 
     echo "Debug: Training script completed"
     """
@@ -47,6 +50,7 @@ workflow {
     trainModel(
         params.model, params.epochs,
         params.train_csv, params.val_csv, params.model_save_dir,
+        params.load_weights_path,
         params.cfg_63, params.baf_cfg, params.mini_cfg,
         params.images_data_dir, params.images_dir_in_csv,
         params.gpu)
