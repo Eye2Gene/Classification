@@ -18,10 +18,12 @@ The pipeline uses docker images on Github Docker Registry. If you make any chang
 
 ```bash
 docker build -t eye2gene/e2g-train .
+
 docker tag eye2gene/e2g-train ghcr.io/eye2gene/e2g-train:latest
+docker tag eye2gene/e2g-train ghcr.io/eye2gene/e2g-train:v0.0.5
 
 docker push ghcr.io/eye2gene/e2g-train:latest
-docker push ghcr.io/eye2gene/e2g-train:v0.0.1
+docker push ghcr.io/eye2gene/e2g-train:v0.0.5
 ```
 
 ## Running Docker locally

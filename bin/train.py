@@ -9,6 +9,7 @@ import os
 import random
 import sys
 import tensorflow as tf
+import pandas as pd
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
@@ -56,6 +57,7 @@ if __name__ == "__main__":
     parser.add_argument('--lr', help='Learning rate', type=float)
     parser.add_argument('--lr-schedule', choices=['linear', 'poly'], help='Learning rate scheduler')
     parser.add_argument('--lr-power', type=int, help='Power of lr decay, only used when using polynomial learning rate scheduler', default=1)
+    parser.add_argument('--load-weights-path', help='Load model weights from file to start training from')
     parser.add_argument('--model-save-dir', default='trained_models', help='Save location for trained models')
     parser.add_argument('--model-log-dir', default='logs', help='Save location for model logs (used by tensorboard)')
     parser.add_argument('--no-weights', action='store_true', help="Don't download and use any pretrained model weights, random init")
@@ -69,13 +71,13 @@ if __name__ == "__main__":
     parser.add_argument('--gpu', type=str, default="0")
 
     args = parser.parse_args()
-    
+
     import os
     os.environ["CUDA_VISIBLE_DEVICES"]=args.gpu
-    
+
     physical_devices = tf.config.experimental.list_physical_devices('GPU')
     tf.config.experimental.set_memory_growth(physical_devices[0], True)
-    
+
     # TODO: Move to model description?
     defaults = {
         'augmentations': {},
@@ -84,7 +86,7 @@ if __name__ == "__main__":
         'data_dir': None,
         'dataseries_path': 'file_path',
         'dataseries_label': 'gene',
-        'dropout': 0.0, 
+        'dropout': 0.0,
         'epochs': 10,
         'input_shape': [256, 256],
         'lr': 1e-04,
@@ -100,20 +102,22 @@ if __name__ == "__main__":
     }
 
     model_config = defaults.copy()
-    
+
+    # Overwrite the above defaults with any config files
     if args.cfg:
         for cfg_file in args.cfg:
             with open(cfg_file, 'r') as f:
                 cfg = json.load(f)
             model_config.update(cfg)
-        
-    no_arg = [ 'augemntations', 'cfg', 'model', 'no-weights', 'preview' ] 
+
+    # Overwrite the above defaults with the command line arguments
+    no_arg = [ 'augemntations', 'cfg', 'model', 'no-weights', 'preview' ]
     arg_dict = vars(args)
     for k, v in arg_dict.items():
         if not (k in no_arg or v is None):
             model_config[k] = v
-    
-    #,Manually parse remaining arguments
+
+    # Manually parse remaining arguments
     if args.model: model_config['model_name'] = args.model
     model_config['use_imagenet_weights'] = (not args.no_weights)
 
@@ -139,12 +143,12 @@ if __name__ == "__main__":
             print('Error parsing augmentations, make sure it is in csv format, with each value being setting=value')
             print(e)
             exit(1)
-    
+
     #if not args.data_dir:
     #    if not args.train_dir:
     #        print('Need to supply --train-dir')
     #        sys.exit(1)
-     
+
     # Set tf to grow into GPU memory, not pre-allocate
     gpus = tf.config.experimental.list_physical_devices('GPU')
 
@@ -159,7 +163,7 @@ if __name__ == "__main__":
 
 
     # Create model
-    
+
     """
     if model_config['model_name'] == 'vgg16':
         model = VGG16(model_config)
@@ -172,9 +176,9 @@ if __name__ == "__main__":
     elif model_config['model_name'] == 'nasnetlarge':
         model = NASNetLarge(model_config)
     """
-    
+
     from models import list_models, get_model
-    
+
     modelcls = get_model(model_config['model_name'])
     if modelcls:
         model = modelcls(model_config)
@@ -185,23 +189,37 @@ if __name__ == "__main__":
             print("-", m)
         sys.exit(1)
 
+    if args.load_weights_path and os.path.exists(args.load_weights_path):
+        model.load(args.load_weights_path)
+        print(f"Loaded weights from {args.load_weights_path}")
 
     if args.verbose:
         model.print_summary()
-    
+
     if args.preview:
         print('## Generating preview data ##')
         model.generate_preview()
         sys.exit(1)
 
+    os.makedirs(model_config['model_save_dir'], exist_ok=True)
+
+    # Training
     model.compile()
     print('## Training on train data ##')
-    
+
     model.save_config()
     history = model.train(workers=model_config['workers'])
+
+    # Save training history
+    os.makedirs(model_config['model_log_dir'], exist_ok=True)
+    history_file = os.path.join(model_config['model_log_dir'], 'training_history.csv')
+    history_df = pd.DataFrame(history.history)
+    history_df.to_csv(history_file, index=False)
+    print(f"Training history saved to {history_file}")
+
     print('## Training complete ##')
 
-    print('## Evaluating on test data##')
+    print('## Evaluating on test data ##')
     score = model.evaluate()
     print('Validation loss:', score[0])
     print('Validation accuracy:', score[1])
