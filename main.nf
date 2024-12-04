@@ -28,7 +28,8 @@ process trainModel {
     path "logs/*"
 
     script:
-    def tmp = ['--load-weights-path']
+    def tmp = []
+    if (load_weights_h5_path) tmp.add('--load-weights-path')
     if (load_weights_h5_path) tmp.add(load_weights_h5_path[0])
     def extra_args = tmp.join(' ')
     """
