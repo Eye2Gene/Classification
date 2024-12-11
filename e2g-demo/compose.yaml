@@ -1,0 +1,28 @@
+name: flwr-e2g-demo
+
+services:
+  # # create a SuperExec component
+  # superexec:
+  #   build:
+  #     dockerfile: superexec.Dockerfile
+  #     pull: true
+  #   ports:
+  #     - "9093:9093"
+  #   command:
+  #     - --executor
+  #     - flwr.superexec.deployment:executor
+  #     - --executor-config
+  #     - superlink="superlink:9091"
+  #     - --insecure
+  #   depends_on:
+  #     - superlink
+
+  # create a SuperLink component
+  superlink:
+    image: docker.io/flwr/superlink:1.13.0
+    ports:
+      - "9091:9091"
+      - "9092:9092"
+    command:
+      - --insecure
+
