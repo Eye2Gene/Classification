@@ -36,7 +36,7 @@ screen -mS SuperNode ~/start-node.sh
 docker build -f supernode.Dockerfile -t flwr-supernode-2 .
 
 # then run
-e2g-demo flwr run . e2gdemo
+flwr run . e2gdemo 2>&1 | tee flwr_run.log
 ```
 
 ---
@@ -99,10 +99,10 @@ rsync -avz --progress flwr-monai-demo-supernode.tar ec2-user@10.3.129.36:
 
 sudo docker run -it --rm --entrypoint=/bin/bash flwr-demo-supernode:latest
 
-host,10.0.175.85,i-0dc6cd7dd750b482a (25/5 GB) eu-west-2
-1,10.1.134.255,i-0726cae99095f1ffd   (15/16 GB) eu-west-2
-2,10.2.143.97,i-0847fe2474d6582d2    (15/16 GB) eu-central-1
-3,10.3.129.36,i-0f6657fdbb78fab2c    (14/17 GB) ap-southeast-2
+host,10.0.175.85,i-0dc6cd7dd750b482a eu-west-2
+1,10.1.134.255,i-0726cae99095f1ffd   eu-west-2
+2,10.2.143.97,i-0847fe2474d6582d2    eu-central-1
+3,10.3.129.36,i-0f6657fdbb78fab2c    ap-southeast-2
 
 scp -r /mnt/data1/Eye2Gene/classification_params/configs i-0726cae99095f1ffd:
 scp -r /mnt/data1/Eye2Gene/classification_params/configs i-0847fe2474d6582d2:
@@ -127,4 +127,104 @@ sudo usermod -aG docker ec2-user
 # copy aws_params.config main.nf nextflow.config
 
 docker system prune -f; docker volume prune -f; docker image prune -f
+```
+
+## use venv
+
+```shell
+cd
+python3 -m venv .venv
+source ~/.venv/bin/activate
+pip install --upgrade pip
+pip install "flwr==1.14.0" "boto3>=1.26.0" "botocore>=1.29.0" "tensorflow>=2.10.0"
+
+flower-supernode --superlink="10.0.175.85:9092" --insecure --node-config="site='site1'"
+flower-supernode --superlink="10.0.175.85:9092" --insecure --node-config="site='site2'"
+```
+
+4326 in HEX_baf_v4_val.csv
+16709 in HEX_baf_v4_train.csv
+
+```shell
+# run in main
+export TF_CPP_MIN_LOG_LEVEL=3
+flower-superlink --insecure
+
+# then run for each client site
+./start-node.sh
+
+# then in main again, run
+export TF_CPP_MIN_LOG_LEVEL=3
+flwr run . e2gdemo --stream 2>&1 | tee flwr_run.log
+```
+
+### Current error in clients
+
+After `nextflow` step
+
+```log
+ERROR :     ClientApp raised an exception
+Traceback (most recent call last):
+  File "/python/venv/lib/python3.11/site-packages/flwr/client/clientapp/app.py", line 142, in run_clientapp
+    reply_message = client_app(message=message, context=context)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/python/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 143, in __call__
+    return self._call(message, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/python/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 126, in ffn
+    out_message = handle_legacy_message_from_msgtype(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/python/venv/lib/python3.11/site-packages/flwr/client/message_handler/message_handler.py", line 128, in handle_legacy_message_from_msgtype
+    fit_res = maybe_call_fit(
+              ^^^^^^^^^^^^^^^
+  File "/python/venv/lib/python3.11/site-packages/flwr/client/client.py", line 224, in maybe_call_fit
+    return client.fit(fit_ins)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/python/venv/lib/python3.11/site-packages/flwr/client/numpy_client.py", line 238, in _fit
+    parameters_prime_proto = ndarrays_to_parameters(parameters_prime)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/python/venv/lib/python3.11/site-packages/flwr/common/parameter.py", line 28, in ndarrays_to_parameters
+    tensors = [ndarray_to_bytes(ndarray) for ndarray in ndarrays]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/python/venv/lib/python3.11/site-packages/flwr/common/parameter.py", line 28, in <listcomp>
+    tensors = [ndarray_to_bytes(ndarray) for ndarray in ndarrays]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/python/venv/lib/python3.11/site-packages/flwr/common/parameter.py", line 43, in ndarray_to_bytes
+    np.save(bytes_io, ndarray, allow_pickle=False)
+  File "/python/venv/lib/python3.11/site-packages/numpy/lib/_npyio_impl.py", line 573, in save
+    arr = np.asanyarray(arr)
+          ^^^^^^^^^^^^^^^^^^
+ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (2,) + inhomogeneous part.
+ERROR:flwr:ClientApp raised an exception
+Traceback (most recent call last):
+  File "/python/venv/lib/python3.11/site-packages/flwr/client/clientapp/app.py", line 142, in run_clientapp
+    reply_message = client_app(message=message, context=context)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/python/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 143, in __call__
+    return self._call(message, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/python/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 126, in ffn
+    out_message = handle_legacy_message_from_msgtype(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/python/venv/lib/python3.11/site-packages/flwr/client/message_handler/message_handler.py", line 128, in handle_legacy_message_from_msgtype
+    fit_res = maybe_call_fit(
+              ^^^^^^^^^^^^^^^
+  File "/python/venv/lib/python3.11/site-packages/flwr/client/client.py", line 224, in maybe_call_fit
+    return client.fit(fit_ins)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/python/venv/lib/python3.11/site-packages/flwr/client/numpy_client.py", line 238, in _fit
+    parameters_prime_proto = ndarrays_to_parameters(parameters_prime)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/python/venv/lib/python3.11/site-packages/flwr/common/parameter.py", line 28, in ndarrays_to_parameters
+    tensors = [ndarray_to_bytes(ndarray) for ndarray in ndarrays]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/python/venv/lib/python3.11/site-packages/flwr/common/parameter.py", line 28, in <listcomp>
+    tensors = [ndarray_to_bytes(ndarray) for ndarray in ndarrays]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/python/venv/lib/python3.11/site-packages/flwr/common/parameter.py", line 43, in ndarray_to_bytes
+    np.save(bytes_io, ndarray, allow_pickle=False)
+  File "/python/venv/lib/python3.11/site-packages/numpy/lib/_npyio_impl.py", line 573, in save
+    arr = np.asanyarray(arr)
+          ^^^^^^^^^^^^^^^^^^
+ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (2,) + inhomogeneous part.
 ```

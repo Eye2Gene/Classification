@@ -8,11 +8,10 @@ version = "1.0.0"
 description = "Federated Learning with E2G and Flower using AWS and NextFlow"
 license = "Apache-2.0"
 dependencies = [
-    "flwr[simulation]==1.13.0",
-    "filelock==3.15.4",
+    "flwr==1.14.0",
     "boto3>=1.26.0",
     "botocore>=1.29.0",
-    "tensorflow>=2.10.0",
+    "tensorflow-cpu>=2.10.0",
 ]
 
 [tool.hatch.build.targets.wheel]
@@ -26,22 +25,32 @@ serverapp = "e2gflower.server_app:app"
 clientapp = "e2gflower.client_app:app"
 
 [tool.flwr.app.config]
-num-server-rounds = 5
-fraction-fit = 0.5
+num-server-rounds = 1 # 5
+fraction-fit = 1.0
 batch-size = 128
 
 [tool.flwr.federations]
 default = "e2gdemo"
-#default = "local-simulation"
 
 [tool.flwr.federations.e2gdemo]
-address = "localhost:9093"
+address = "10.0.175.85:9093" # "localhost:9093"
 insecure = true
 
-[tool.flwr.federations.local-simulation]
-options.num-supernodes = 2
+[tool.ruff]
+target-version = "py39"
+line-length = 120
 
-[tool.flwr.federations.local-simulation-gpu]
-options.num-supernodes = 10
-options.backend.client-resources.num-cpus = 4
-options.backend.client-resources.num-gpus = 0.25 # at most 4 ClientApps will run in a given GPU
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+extend-select = ["UP", "RUF", "I", "D", "E501"]
+ignore = ['UP036']
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D100", "D103", "D104"]
+"__main__.py" = ["D100"]
+"__init__.py" = ["D104"]
