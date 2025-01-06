@@ -218,6 +218,10 @@ if __name__ == "__main__":
     history_df.to_csv(history_file, index=False)
     print(f"Training history saved to {history_file}")
 
+    # Update model._config with the last key-values of history.history
+    for key, value in history.history.items():
+        model._config[key] = value[-1]
+
     print('## Training complete ##')
 
     print('## Evaluating on test data ##')
