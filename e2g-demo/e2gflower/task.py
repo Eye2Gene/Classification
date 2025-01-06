@@ -9,7 +9,6 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # 0 = all logs, 1 = INFO, 2 = WARNING,
 import boto3
 import tensorflow as tf
 from botocore.exceptions import ClientError
-from keras import Model
 
 # Suppress other warnings
 logging.getLogger("tensorflow").setLevel(logging.ERROR)
@@ -21,7 +20,7 @@ def load_model(model_path):
     return tf.keras.models.load_model(model_path)
 
 
-def load_latest_model_from_s3(bucket: str, prefix: str) -> tuple[Model | None, dict | None, str | None]:
+def load_latest_model_from_s3(bucket: str, prefix: str):
     """Retrieve the latest model files from an S3 bucket.
 
     Args:

@@ -36,7 +36,7 @@ class FlowerClient(NumPyClient):
         self.s3_key_prefix = s3_key_prefix
         self.nextflow_command = nextflow_command
 
-    def fit(self):
+    def fit(self, parameters, config):  # must use 3 arguments
         """Run the Nextflow pipeline and get the latest model from S3.
 
         Args:
@@ -47,7 +47,7 @@ class FlowerClient(NumPyClient):
             tuple: A tuple containing model parameters, number of examples, and metrics.
         """
         _, _, initial_model_path_S3 = load_latest_model_from_s3("eye2gene-main", "initial_model")
-        nextflow_command = self.nextflow_command + f"--load_weights_h5_path '{initial_model_path_S3}'"
+        nextflow_command = self.nextflow_command + f" --load_weights_h5_path '{initial_model_path_S3}'"
         print(f">>> debug: 'def fit' nextflow_command {nextflow_command}")
         # Run Nextflow pipeline
         subprocess.run(nextflow_command, shell=True, check=True)
@@ -58,7 +58,7 @@ class FlowerClient(NumPyClient):
         # Return model parameters, number of examples, and metrics
         return model.get_weights(), 16709, metadata
 
-    def evaluate(self):
+    def evaluate(self, parameters, config):  # must use 3 arguments
         """Evaluate the model using the latest metrics from S3."""
         # For this setup, evaluation is done within the Nextflow pipeline
         # We'll return the metrics from the latest model
