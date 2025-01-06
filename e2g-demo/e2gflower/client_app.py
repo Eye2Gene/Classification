@@ -56,13 +56,14 @@ class FlowerClient(NumPyClient):
         model, metadata, _ = load_latest_model_from_s3(self.s3_bucket, self.s3_key_prefix)
 
         # Return model parameters, number of examples, and metrics
+        print(f">>> debug: 'def fit' metadata {metadata}")
         return model.get_weights(), 16709, metadata
 
     def evaluate(self, parameters, config):  # must use 3 arguments
         """Evaluate the model using the latest metrics from S3."""
         # For this setup, evaluation is done within the Nextflow pipeline
         # We'll return the metrics from the latest model
-        _, metadata = load_latest_model_from_s3(self.s3_bucket, self.s3_key_prefix)
+        _, metadata, _ = load_latest_model_from_s3(self.s3_bucket, self.s3_key_prefix)
         print(f">>> debug: 'def evaluate' metadata {metadata}")
         return metadata["loss"], 16709, {"accuracy": metadata["accuracy"]}
 
