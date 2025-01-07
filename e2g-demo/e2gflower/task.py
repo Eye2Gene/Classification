@@ -1,6 +1,5 @@
 """e2gflower: A Flower / E2G app."""
 
-import csv
 import json
 import logging
 import os
@@ -56,26 +55,6 @@ def load_latest_model_from_s3(bucket: str, prefix: str):
         # Load model metadata
         with open(local_metadata_path) as f:
             metadata = json.load(f)
-
-        # AWSS: temp solution, final solution is update Classification repo
-        # Try to get the training history CSV file
-        try:
-            training_history = os.path.join(
-                sorted_objects[0]["Key"].split("trained_models")[0], "logs", "training_history.csv"
-            )
-            s3.download_file(bucket, training_history, "/tmp/training_history.csv")
-
-            # Read the CSV file and get the last row as a dictionary
-            with open("/tmp/training_history.csv") as file:
-                reader = csv.DictReader(file)
-                last_row = None
-                for row in reader:
-                    last_row = row
-
-            metrics = {key: float(value) for key, value in last_row.items()}
-            metadata.update(metrics)
-        except Exception as e:
-            print(f">>> debug: 'load_latest_model_from_s3' loading from eye2gene-main, known no metrics {e}")
 
         return model, metadata, s3_path_h5
     except ClientError as e:

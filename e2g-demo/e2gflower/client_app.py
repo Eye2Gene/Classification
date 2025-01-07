@@ -57,7 +57,7 @@ class FlowerClient(NumPyClient):
 
         # Return model parameters, number of examples, and metrics
         print(f">>> debug: 'def fit' metadata {metadata}")
-        return model.get_weights(), 16709, metadata
+        return model.get_weights(), metadata["train_size"], {}
 
     def evaluate(self, parameters, config):  # must use 3 arguments
         """Evaluate the model using the latest metrics from S3."""
@@ -65,7 +65,7 @@ class FlowerClient(NumPyClient):
         # We'll return the metrics from the latest model
         _, metadata, _ = load_latest_model_from_s3(self.s3_bucket, self.s3_key_prefix)
         print(f">>> debug: 'def evaluate' metadata {metadata}")
-        return metadata["loss"], 16709, {"accuracy": metadata["accuracy"]}
+        return metadata["loss"], metadata["val_size"], {"accuracy": metadata["accuracy"]}
 
 
 def client_fn(context: Context):

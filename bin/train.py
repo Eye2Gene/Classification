@@ -41,6 +41,9 @@ def parse_augs(augs):
         parsed_augs[var] = val
     return parsed_augs
 
+def get_csv_row_count(file_path):
+    df = pd.read_csv(file_path)
+    return len(df)
 
 if __name__ == "__main__":
 
@@ -221,6 +224,10 @@ if __name__ == "__main__":
     # Update model._config with the last key-values of history.history
     for key, value in history.history.items():
         model._config[key] = value[-1]
+
+    # Add train_size and val_size to model._config
+    model._config['train_size'] = get_csv_row_count(model._config['train_dir'])
+    model._config['val_size'] = get_csv_row_count(model._config['val_dir'])
 
     print('## Training complete ##')
 
