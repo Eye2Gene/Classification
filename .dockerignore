@@ -181,3 +181,7 @@ poetry.toml
 pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+
+*.zip
+HEX_*
+seqera_files*
