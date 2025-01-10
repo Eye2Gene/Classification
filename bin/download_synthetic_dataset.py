@@ -18,7 +18,3 @@ gdown.download(drive_url, output_path, quiet=False)
 print("Extracting tarfile")
 with tarfile.open(output_path) as tar:
     tar.extractall(path="datasets")
-
-
-
-

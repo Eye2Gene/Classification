@@ -1,0 +1,94 @@
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "e2g-classification"
+version = "0.0.1"
+description = "Eye2Gene Classification"
+authors = [
+    "Nikolas Pontikos <n.pontikos@ucl.ac.uk>",
+    "William Woof <w.woof@ucl.ac.uk>",
+]
+license = "license.txt"
+readme = "README.md"
+repository = "https://github.com/Eye2Gene/Classification"
+packages = [{ include = "models" }]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.12"
+keras = "^2.15.0"
+tensorflow = "2.15.1"
+pandas = "^2.2.3"
+scikit-learn = "^1.6.1"
+pillow = "^11.1.0"
+protobuf = "^4.25.5"
+keras-cv-attention-models = "^1.4.1"
+matplotlib = "^3.10.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "*"
+pre-commit = "*"
+pytest-cov = "*"
+typed-argument-parser = "*"
+pdbpp = "*"
+ipdb = "*"
+boto3-stubs = { extras = ["lambda", "s3"], version = "*" }
+mypy-boto3-s3 = "*"
+mypy-boto3-lambda = "*"
+pytest-env = "*"
+ipython = "*"
+jupyterlab = "*"
+pip = "*"
+pytest-xdist = "*"
+pandas-stubs = "*"
+mypy = "*"
+types-tqdm = "*"
+types-pillow = "*"
+typing-extensions = "*"
+mypy-protobuf = "*"
+
+[tool.pytest.ini_options]
+addopts = "tests --cov=models --cov-report=term-missing:skip-covered --cov-report=xml --dist=loadgroup -n 8 --durations=5"
+
+[tool.coverage.report]
+omit = ["__main__.py"]
+exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
+
+[tool.poetry_bumpversion.file."models/__init__.py"]
+
+[tool.poetry_bumpversion.file."README.md"]
+search = 'VERSION: {current_version}'
+replace = 'VERSION: {new_version}'
+
+[tool.mypy]
+# ignore_missing_imports = true #waiting for some stubs
+exclude = 'tests/'
+strict = true
+disable_error_code = ["type-arg"]
+
+[[tool.mypy.overrides]]
+module = ["sklearn.*", "keras_cv_attention_models.*", "tensorflow.*", "keras.*"]
+ignore_missing_imports = true
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+extend-select = ["UP", "RUF", "I", "D", "E501"]
+ignore = ['UP036']
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D100", "D103", "D104"]
+"__main__.py" = ["D100"]
+"__init__.py" = ["D104"]
+
+[tool.poetry.requires-plugins]
+poetry-bumpversion = ">=0.3.3"

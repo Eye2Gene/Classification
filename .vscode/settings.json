@@ -1,0 +1,34 @@
+{
+  "files.watcherExclude": {
+    "**/.env/**": true,
+    "**/.venv/**": true,
+    "**/env/**": true,
+    "**/venv/**": true,
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true,
+    "**/.mypy_cache/*/**": true
+  },
+  "python.envFile": "${workspaceFolder}/.env",
+  "python.testing.pytestArgs": ["tests", "-v", "-c", "tests/pytest.ini"],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "[yaml]": {
+    "editor.tabSize": 2,
+    "editor.formatOnType": true,
+    "editor.codeLens": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "python.terminal.launchArgs": ["-m", "IPython", "--no-autoindent"],
+  "editor.formatOnSave": true,
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnPaste": false,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    },
+    "editor.formatOnType": true
+  },
+  "conventionalCommits.scopes": ["deps"]
+}

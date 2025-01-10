@@ -3,7 +3,7 @@ import numpy as np
 import sys
 
 import tensorflow as tf
-#tf.compat.v1.enable_eager_execution() 
+#tf.compat.v1.enable_eager_execution()
 
 #Hack to get relative import working
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
@@ -18,9 +18,9 @@ if __name__ == "__main__":
     parser.add_argument('--embedding', help='Store the raw embeddings before the final layer at the specified path')
     parser.add_argument('--no-softmax', action='store_true')
     parser.add_argument('--gpu', type=str, default="0")
-    
+
     args = parser.parse_args()
-    
+
     import os
     os.environ["CUDA_VISIBLE_DEVICES"]=args.gpu
 
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     prediction, labels, filenames = model.predict(data_path,
                                                   return_labels=True,
                                                   return_filenames=True)
-    
+
     pred_class = prediction.argmax(axis=-1)
     correct = (pred_class == labels)
     total = len(labels)
@@ -58,14 +58,14 @@ if __name__ == "__main__":
         import pandas as pd
         df = pd.read_csv(data_path)
         path_col = model._config['dataseries_path']
-        
+
         df_pred = pd.DataFrame()
         df_pred[path_col] = filenames
-        df_pred["pred_class"] = [ sorted(model.classes)[i] for i in pred_class ] 
+        df_pred["pred_class"] = [ sorted(model.classes)[i] for i in pred_class ]
         for i, cls in enumerate(sorted(model.classes)):
             df_pred["pred_"+cls] = prediction[:,i]
         df_pred["pred_model"] = model_path
-        
+
         df = pd.merge(df, df_pred, how='outer', on=path_col)
         df.to_csv(args.csv, index=False)
 

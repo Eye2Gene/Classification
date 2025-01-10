@@ -1,8 +1,0 @@
-keras
-numpy
-tensorflow>=2.2.0
-pandas
-scikit-learn
-pillow
-protobuf<=3.20.0
-

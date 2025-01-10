@@ -180,3 +180,7 @@ poetry.toml
 pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+e2g-demo.zip
+HEX_baf*.csv
+HEX_baf*.zip
+seqera_*

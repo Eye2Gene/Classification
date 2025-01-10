@@ -7,13 +7,13 @@ Non-Commercial Licence For Eye2Gene software
 
 This Agreement is made by and between the Licensor and the Licensee as defined and identified below.
 
- 
+
 
 1 Definitions
 
 In this Agreement (“the Agreement”) the following words shall have the following meanings:
 
- 
+
 
 Authors shall mean Dr Nikolas Pontikos and Dr William Woof.
 
@@ -67,7 +67,7 @@ The Licensee or a Recipient (as the case may be) shall indemnify the Licensor an
 
 8.2 No permission is granted to use the trademarks or product names of the Licensor except as required for reasonable and customary use in describing the origin of the Software and for the purposes of abiding by the terms of Clause 3.1.
 
-8.3 The Licensee or a Recipient (as applicable) shall promptly notify the Licensor, in sufficient detail, all improvements and new uses of the Software (“Improvements”). The Licensor (including any affiliate of UCL) shall have a non-exclusive, fully paid-up, royalty-free, irrevocable and perpetual licence under the Improvements for non-commercial academic research and teaching purposes. 
+8.3 The Licensee or a Recipient (as applicable) shall promptly notify the Licensor, in sufficient detail, all improvements and new uses of the Software (“Improvements”). The Licensor (including any affiliate of UCL) shall have a non-exclusive, fully paid-up, royalty-free, irrevocable and perpetual licence under the Improvements for non-commercial academic research and teaching purposes.
 
 8.4 The Licensee or a Recipient (as applicable) grants an exclusive first option to the Licensor to be exercised by the Licensor within three (3) years of the date of notification of the Improvements under Clause 8.3 to use any Improvements for commercial purposes on terms to be negotiated and agreed by the parties in good faith within a period of six (6) months from the date of exercise of the said option (including without limitation any royalty share in net income from such commercialization payable to the Licensee or a Recipient, as the case may be).
 

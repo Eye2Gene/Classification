@@ -4,6 +4,15 @@
 **/logs/
 **/trained_models/
 **/work/
+**/trained_models/
+**/results/
+**/res_output/
+*.ipynb
+nextflow.config
+local_params.config
+nextflow_docs.md
+aws_params.config
+**/e2g-demo/
 
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python

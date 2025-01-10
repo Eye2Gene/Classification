@@ -1,5 +1,3 @@
-#!/usr/bin/env nextflow
-
 process trainModel {
     container 'ghcr.io/eye2gene/e2g-train:latest'
     // container 'eye2gene/e2g-train'
