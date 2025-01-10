@@ -3,6 +3,7 @@
 import json
 import logging
 import os
+from urllib.parse import urlparse
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # 0 = all logs, 1 = INFO, 2 = WARNING, 3 = ERROR
 import boto3
@@ -49,6 +50,11 @@ def load_latest_model_from_s3(bucket: str, prefix: str):
 
         s3_path_h5 = f"s3://{bucket}/{latest_h5['Key']}"
 
+        print(f">>> debug: 'load_latest_model_from_s3' s3_path_h5 {s3_path_h5}")
+        print(
+            f">>> debug: 'load_latest_model_from_s3' latest_h5_size {os.path.getsize(local_model_path) / (1024**2):.2f} MB"
+        )
+
         # Load the model
         model = load_model(local_model_path)
 
@@ -63,3 +69,32 @@ def load_latest_model_from_s3(bucket: str, prefix: str):
     except Exception as e:
         print(f"Error load_latest_model_from_s3' Exception loading model from S3: {e}")
         return None, None, None
+
+
+def upload_file_to_s3(file_path: str, s3_path: str, delete: bool = False):
+    """Upload a file to an S3 bucket.
+
+    Args:
+        file_path: The local path to the file to upload.
+        s3_path: The full S3 path including bucket and key (e.g., 's3://bucket-name/path/to/file.ext').
+        delete: Whether to delete the local file after successful upload (default: False).
+
+    Returns:
+        True if the file was uploaded successfully, False otherwise.
+    """
+    s3 = boto3.client("s3")
+    try:
+        parsed_s3_path = urlparse(s3_path)
+        bucket = parsed_s3_path.netloc
+        s3_key = parsed_s3_path.path.lstrip("/")
+
+        s3.upload_file(file_path, bucket, s3_key)
+        if delete:
+            os.remove(file_path)
+        return True
+    except ClientError as e:
+        print(f"Error 'upload_file_to_s3' ClientError uploading file to S3: {e}")
+        return False
+    except Exception as e:
+        print(f"Error 'upload_file_to_s3' Exception uploading file to S3: {e}")
+        return False

@@ -6,7 +6,7 @@ RUN pip install --no-cache \
     "flwr==1.14.0" \
     "boto3>=1.26.0" \
     "botocore>=1.29.0" \
-    "tensorflow-cpu>=2.10.0"
+    "tensorflow-cpu==2.15.1"
 
 USER root
 RUN apt-get update && apt-get install -y curl openjdk-11-jdk

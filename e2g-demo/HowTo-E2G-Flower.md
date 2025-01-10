@@ -1,8 +1,8 @@
 # For E2G with Flower
 
-# from Flower/examples/quickstart-MONAI: Run with the Deployment Engine (not online yet)
+## from Flower/examples/quickstart-MONAI: Run with the Deployment Engine (not online yet)
 
-Using Flower 1.13, at E2G_Main first: `/home/ec2-user/e2g-demo`
+Using Flower 1.14, at E2G_Main first: `/home/ec2-user/e2g-demo`
 
 ```shell
 e2g-demo
@@ -19,7 +19,7 @@ e2g-demo
 └── README.md
 ```
 
-- Change `/home/ec2-user/e2g-demo/superexec.Dockerfile`, `/home/ec2-user/e2g-demo/supernode.Dockerfile` and `/home/ec2-user/e2g-demo/compose.yaml`
+- Change `/home/ec2-user/e2g-demo/superexec.Dockerfile` (deleted), `/home/ec2-user/e2g-demo/supernode.Dockerfile` and `/home/ec2-user/e2g-demo/compose.yaml`
 - Edit `pyproject.toml`, then
 
 ```bash
@@ -29,14 +29,14 @@ docker-compose build
 docker-compose up
 
 # copy supernode.Dockerfile to site1 and do:
-docker build -f supernode.Dockerfile -t flwr-supernode-1 .
+docker build -f supernode.Dockerfile -t flwr-supernode .
 screen -mS SuperNode ~/start-node.sh
 
 # same for site2
-docker build -f supernode.Dockerfile -t flwr-supernode-2 .
+docker build -f supernode.Dockerfile -t flwr-supernode .
 
 # then run
-flwr run . e2gdemo 2>&1 | tee flwr_run.log
+flwr run . e2gdemo --stream 2>&1 | tee flwr_run.log
 ```
 
 ---
@@ -156,75 +156,4 @@ flower-superlink --insecure
 # then in main again, run
 export TF_CPP_MIN_LOG_LEVEL=3
 flwr run . e2gdemo --stream 2>&1 | tee flwr_run.log
-```
-
-### Current error in clients
-
-After `nextflow` step
-
-```log
-ERROR :     ClientApp raised an exception
-Traceback (most recent call last):
-  File "/python/venv/lib/python3.11/site-packages/flwr/client/clientapp/app.py", line 142, in run_clientapp
-    reply_message = client_app(message=message, context=context)
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/python/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 143, in __call__
-    return self._call(message, context)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/python/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 126, in ffn
-    out_message = handle_legacy_message_from_msgtype(
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/python/venv/lib/python3.11/site-packages/flwr/client/message_handler/message_handler.py", line 128, in handle_legacy_message_from_msgtype
-    fit_res = maybe_call_fit(
-              ^^^^^^^^^^^^^^^
-  File "/python/venv/lib/python3.11/site-packages/flwr/client/client.py", line 224, in maybe_call_fit
-    return client.fit(fit_ins)
-           ^^^^^^^^^^^^^^^^^^^
-  File "/python/venv/lib/python3.11/site-packages/flwr/client/numpy_client.py", line 238, in _fit
-    parameters_prime_proto = ndarrays_to_parameters(parameters_prime)
-                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/python/venv/lib/python3.11/site-packages/flwr/common/parameter.py", line 28, in ndarrays_to_parameters
-    tensors = [ndarray_to_bytes(ndarray) for ndarray in ndarrays]
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/python/venv/lib/python3.11/site-packages/flwr/common/parameter.py", line 28, in <listcomp>
-    tensors = [ndarray_to_bytes(ndarray) for ndarray in ndarrays]
-               ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/python/venv/lib/python3.11/site-packages/flwr/common/parameter.py", line 43, in ndarray_to_bytes
-    np.save(bytes_io, ndarray, allow_pickle=False)
-  File "/python/venv/lib/python3.11/site-packages/numpy/lib/_npyio_impl.py", line 573, in save
-    arr = np.asanyarray(arr)
-          ^^^^^^^^^^^^^^^^^^
-ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (2,) + inhomogeneous part.
-ERROR:flwr:ClientApp raised an exception
-Traceback (most recent call last):
-  File "/python/venv/lib/python3.11/site-packages/flwr/client/clientapp/app.py", line 142, in run_clientapp
-    reply_message = client_app(message=message, context=context)
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/python/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 143, in __call__
-    return self._call(message, context)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/python/venv/lib/python3.11/site-packages/flwr/client/client_app.py", line 126, in ffn
-    out_message = handle_legacy_message_from_msgtype(
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/python/venv/lib/python3.11/site-packages/flwr/client/message_handler/message_handler.py", line 128, in handle_legacy_message_from_msgtype
-    fit_res = maybe_call_fit(
-              ^^^^^^^^^^^^^^^
-  File "/python/venv/lib/python3.11/site-packages/flwr/client/client.py", line 224, in maybe_call_fit
-    return client.fit(fit_ins)
-           ^^^^^^^^^^^^^^^^^^^
-  File "/python/venv/lib/python3.11/site-packages/flwr/client/numpy_client.py", line 238, in _fit
-    parameters_prime_proto = ndarrays_to_parameters(parameters_prime)
-                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/python/venv/lib/python3.11/site-packages/flwr/common/parameter.py", line 28, in ndarrays_to_parameters
-    tensors = [ndarray_to_bytes(ndarray) for ndarray in ndarrays]
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/python/venv/lib/python3.11/site-packages/flwr/common/parameter.py", line 28, in <listcomp>
-    tensors = [ndarray_to_bytes(ndarray) for ndarray in ndarrays]
-               ^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/python/venv/lib/python3.11/site-packages/flwr/common/parameter.py", line 43, in ndarray_to_bytes
-    np.save(bytes_io, ndarray, allow_pickle=False)
-  File "/python/venv/lib/python3.11/site-packages/numpy/lib/_npyio_impl.py", line 573, in save
-    arr = np.asanyarray(arr)
-          ^^^^^^^^^^^^^^^^^^
-ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (2,) + inhomogeneous part.
 ```
