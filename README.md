@@ -157,3 +157,20 @@ optional arguments:
 ## Processing
 
 We have included the predictions of Eye2Gene on our internal and external datasets in the `results` folder, as well as a notebook showing how we process these results to get our metrics such as accuracy/AUROC/etc.
+
+## Bumping Version
+
+We use `commitizen`. The instructions below are only for exceptional cases.
+
+1. Using [poetry-bumpversion](https://github.com/monim67/poetry-bumpversion). Bump the version number by running `poetry version [part] [--dry-run]` where `[part]` is `major`, `minor`, or `patch`, depending on which part of the version number you want to bump.
+
+   Use `--dry-run` option to check it in advance.
+
+1. Push the tagged commit created above and the tag itself, i.e.:
+
+   ```bash
+   ver_tag=$(poetry version | cut -d ' ' -f2)
+   git tag -a v"$ver_tag" -m "Tagged version $ver_tag"
+   git push
+   git push --tags
+   ```

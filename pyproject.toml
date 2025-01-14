@@ -92,3 +92,12 @@ convention = "google"
 
 [tool.poetry.requires-plugins]
 poetry-bumpversion = ">=0.3.3"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "v$version"
+version_files = ["models/__init__.py", "pyproject.toml"]
+version_scheme = "pep440"
+version_provider = "poetry"
+update_changelog_on_bump = true
+major_version_zero = true

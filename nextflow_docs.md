@@ -77,8 +77,8 @@ The pipeline uses docker images on Github Docker Registry. If you make any chang
 docker build -t eye2gene/e2g-train .;
 
 docker tag eye2gene/e2g-train "ghcr.io/eye2gene/e2g-train:latest";
-docker tag eye2gene/e2g-train "ghcr.io/eye2gene/e2g-train:v0.0.9";
+docker tag eye2gene/e2g-train "ghcr.io/eye2gene/e2g-train:v0.0.10";
 
 docker push "ghcr.io/eye2gene/e2g-train:latest";
-docker push "ghcr.io/eye2gene/e2g-train:v0.0.9";
+docker push "ghcr.io/eye2gene/e2g-train:v0.0.10";
 ```
