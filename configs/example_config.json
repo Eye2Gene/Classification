@@ -1,0 +1,26 @@
+{
+    "dataseries_path": "file_path",
+    "dataseries_label": "gene",
+    "batch_size": 32,
+    "lr": 0.0001,
+    "dropout": 0.5,
+    "augmentations": {
+        "samplewise_center": false,
+        "samplewise_std_normalization": false,
+        "rotation_range": 15,
+        "brightness_range": [ 0.5, 1.5 ],
+        "horizontal_flip": true
+    },
+    "classes": [
+        "ABCA4",
+        "BEST1",
+        "CHM",
+        "EYS",
+        "PRPH2",
+        "RHO",
+        "RP1",
+        "RPGR",
+        "RS1",
+        "USH2A"
+    ]
+}

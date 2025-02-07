@@ -1,10 +1,11 @@
 import os
 import sys
-import tarfile
+import zipfile
 
-drive_url = "https://drive.google.com/uc?id=19kzVda8iIKsTxrjybfpk6EQstgUIVcBE"
-output_fname = "stylegan2_synthetic_100perclass_onefold.tar.gz"
-output_path = os.path.join("datasets", output_fname)
+DRIVE_URL = "https://drive.google.com/uc?id=1Y-nGfxzcmRsWwIaCvdaUehLUVnSianBH"
+OUTPUT_DIR = "./example_data"
+ZIP_NAME = "synthetic_dataset.zip"
+output_path = os.path.join(OUTPUT_DIR, ZIP_NAME)
 
 try:
     import gdown
@@ -13,11 +14,21 @@ except:
     exit(1)
 
 print("Attempting to retrieve file from Google Drive...")
-gdown.download(drive_url, output_path, quiet=False)
+# Create output directory if it doesn't exist
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-print("Extracting tarfile")
-with tarfile.open(output_path) as tar:
-    tar.extractall(path="datasets")
+try:
+    print("Attempting to retrieve folder from Google Drive...")
+    gdown.download(url=DRIVE_URL, output=output_path, quiet=False)
+    print(f"Download complete. Files saved to {OUTPUT_DIR}")
+
+except Exception as e:
+    print(f"Error downloading folder: {e}")
+    sys.exit(1)
+    
+print("Extracting zip file")
+with zipfile.ZipFile(output_path, 'r') as zip_ref:
+    zip_ref.extractall(OUTPUT_DIR)
 
 
 

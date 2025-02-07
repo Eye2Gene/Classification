@@ -2,8 +2,11 @@
 /checkpoints/
 /logs/
 /trained_models/
+/example_data/
 /work/
-/results
+/results/
+/res_outputs/ #Nextflow output
+
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 

@@ -106,7 +106,7 @@ class ModelBase(metaclass=RegisterModels):
             setattr(self, k, v)
 
         # Set time to obj creation time
-        self.train_start = time.strftime("%d%m%Y-%H%M%S")
+        self.train_start = time.strftime("%Y%m%d-%H%M%S")
 
         if set_layers:
             self.set_layers()
@@ -170,7 +170,7 @@ class ModelBase(metaclass=RegisterModels):
         )
         train_options.update(kwargs)
 
-        if source[-4:] == ".csv":
+        if source.split(".")[-1] == "csv":
             import pandas as pd
 
             csv_data = pd.read_csv(source)
@@ -385,6 +385,7 @@ class ModelBase(metaclass=RegisterModels):
         # Save training config
         print("self.model_save_dir ", self.model_save_dir)
         print("Saving config to", self.save_location()[:-3] + ".json")
+        os.makedirs(os.path.dirname(self.save_location()), exist_ok=True)
         with open(self.save_location()[:-3] + ".json", "w") as config_file:
             config_file.write(json.dumps(self._config))
 
@@ -403,7 +404,7 @@ class ModelBase(metaclass=RegisterModels):
     def load(self, model_path, update_config=True, set_layers=True):
         # TODO: Set this so it prefers supplied config rather than saved config?
         if update_config:
-            config_path = model_path[:-3] + ".json"
+            config_path = model_path.rsplit(".",1)[0] + ".json"
             with open(config_path, "r") as config_file:
                 model_config = json.load(config_file)
 

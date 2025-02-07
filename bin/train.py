@@ -83,7 +83,7 @@ if __name__ == "__main__":
         default=1,
     )
     parser.add_argument(
-        "--load-weights-path",
+        "--resume-from",
         help="Load model weights from file to start training from",
     )
     parser.add_argument(
@@ -182,7 +182,7 @@ if __name__ == "__main__":
     # Manually parse remaining arguments
     if args.model:
         model_config["model_name"] = args.model
-    model_config["use_imagenet_weights"] = not args.no_weights
+    model_config["use_imagenet_weights"] = not (args.no_weights or args.resume_from)
 
     # Parse lr schedule
     if args.lr_schedule == "poly":
@@ -252,9 +252,9 @@ if __name__ == "__main__":
             print("-", m)
         sys.exit(1)
 
-    if args.load_weights_path and os.path.exists(args.load_weights_path):
-        model.load(args.load_weights_path, update_config=False, set_layers=False)
-        print(f"Loaded weights from {args.load_weights_path}")
+    if args.resume_from and os.path.exists(args.resume_from):
+        model.load(args.resume_from, update_config=False, set_layers=False)
+        print(f"Loaded weights from {args.resume_from}")
 
     if args.verbose:
         model.print_summary()

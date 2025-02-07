@@ -12,24 +12,21 @@ docker run --rm -u $(id -u):$(id -g) --gpus all \
   -v $(pwd)/trained_models:/app/trained_models \
   -v $(pwd)/checkpoints:/app/checkpoints \
   -v $(pwd)/logs:/app/logs \
-  -it eye2gene/e2g-train python /app/bin/train.py inceptionv3 --epochs 10 \
+  -it eye2gene/e2g-train \
+  python /app/bin/train.py inceptionv3 --epochs 10 \
   --train-dir ${DATA_DIR}/HEX_baf_v4_train.csv \
   --val-dir ${DATA_DIR}/HEX_baf_v4_val.csv \
-  --cfg ${DATA_DIR}/configs/63class.json \
-        ${DATA_DIR}/configs/augmentations_baf.json \
-        ${DATA_DIR}/configs/hparam_set_6b_mini.json \
+  --cfg ./configs/example_config.json \
   --gpu 0
 
   # optional argument:
-  --load-weights-path ${DATA_DIR}/test_start_weights/03122024-155742-InceptionV3-1e-32bs-0.0001lr.h5
+  --resume-from ${DATA_DIR}/test_start_weights/03122024-155742-InceptionV3-1e-32bs-0.0001lr.h5
 ```
 
 ## Running nextflow locally
 
-> Note: change the docker image inside main.nf to a local image for development.
-
 ```bash
-nextflow run main.nf -c nextflow.config -c local_params.config
+nextflow run nextflow/local.nf -c nextflow/nextflow.config -c nextflow/local_params.config
 ```
 
 Or with the latest remote version

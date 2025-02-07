@@ -77,7 +77,7 @@ optional arguments:
 
 # Prediction
 
-There is another script located at `bin/predict.py` which can be given a directory of images (in a structure keras can read), or a CSV file, and a trained model. The script will then output percentages of correct predictions. You can output the results to either `.npy` or to aCSV file, which will copy the input CSV with the accompanying predictions and save it at the specified location (N.B: This only works when an input CSV is given).
+There is another script located at `bin/predict.py` which can be given a directory of images (in a structure keras can read), or a CSV file, and a trained model. The script will then output percentages of correct predictions. You can output the results to either `.npy` or to a CSV file, which will copy the input CSV with the accompanying predictions and save it at the specified location (N.B: This only works when an input CSV is given).
 
 The model must be provided as an `.h5` file, then the script will search for a corresponding `.json` file containing the network config.
 
