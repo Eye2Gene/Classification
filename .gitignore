@@ -7,6 +7,9 @@
 /results/
 /res_outputs/ #Nextflow output
 
+*.npy
+*.h5
+
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 

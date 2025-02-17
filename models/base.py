@@ -389,7 +389,7 @@ class ModelBase(metaclass=RegisterModels):
         with open(self.save_location()[:-3] + ".json", "w") as config_file:
             config_file.write(json.dumps(self._config))
 
-    def save(self, save_dir=None):
+    def save(self, save_dir=None, npy=False):
         """Save Keras model to disk"""
 
         self.save_config()
@@ -397,9 +397,15 @@ class ModelBase(metaclass=RegisterModels):
         if self.model:
             if self.verbose:
                 print("Saving to", self.save_location())
-
-            # Save model and weights
-            self.model.save(self.save_location())
+            
+            if npy:
+                model_weights = self.model.get_weights()
+                model_weights = np.array(model_weights, dtype=object)
+                save_path = self.save_location().replace(".h5",".npy")
+                np.save(save_path, model_weights)
+            else:
+                # Save model and weights
+                self.model.save(self.save_location())
 
     def load(self, model_path, update_config=True, set_layers=True):
         # TODO: Set this so it prefers supplied config rather than saved config?

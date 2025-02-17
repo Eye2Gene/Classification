@@ -23,7 +23,7 @@ We have provided some exmple synthetic data, which you can download by running `
 You can also specify a JSON config file, for which we have provided some commonly used configurations from our experiments.
 
 Example:
-`python3 bin/train.py inceptionv3 --epochs 100 --train-dir [DATASET_CSV_TRAIN].csv --val-dir [DATASET_CSV_TEST].csv --model-save-dir trainedmodels/ --model-log-dir logs/ --cfg configs/36class.json configs/augmentations_baf.json configs/hparam_set_6b.json`
+`python3 bin/train.py inceptionv3 --epochs 100 --train-dir [DATASET_CSV_TRAIN].csv --val-dir [DATASET_CSV_TEST].csv --model-save-dir trained_models/ --model-log-dir logs/ --cfg configs/36class.json configs/augmentations_baf.json configs/hparam_set_6b.json`
 
 
 ```

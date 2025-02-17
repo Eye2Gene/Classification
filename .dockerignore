@@ -4,6 +4,8 @@
 **/logs/
 **/trained_models/
 **/work/
+**/example_data/
+**/res_output/
 
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python

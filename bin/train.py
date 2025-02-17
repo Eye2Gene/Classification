@@ -102,6 +102,11 @@ if __name__ == "__main__":
         help="Don't download and use any pretrained model weights, random init",
     )
     parser.add_argument(
+        "--npy",
+        action="store_true",
+        help="Use numpy object for saving instead of .h5 - WARNING: not inter-operable with predict script.",
+    )
+    parser.add_argument(
         "--preview",
         action="store_true",
         help="Preview a batch of augmented data and exit",
@@ -253,7 +258,12 @@ if __name__ == "__main__":
         sys.exit(1)
 
     if args.resume_from and os.path.exists(args.resume_from):
-        model.load(args.resume_from, update_config=False, set_layers=False)
+        weight_path = args.resume_from
+        if weight_path.split(".")[-1] == 'npy':
+            model_weights = np.load(weight_path, allow_pickle=True)
+            model.model.set_weights(model_weights)
+        else:
+            model.load(args.resume_from, update_config=False, set_layers=False)
         print(f"Loaded weights from {args.resume_from}")
 
     if args.verbose:
@@ -268,8 +278,8 @@ if __name__ == "__main__":
 
     # Training
     model.compile()
-    print("## Training on train data ##")
 
+    print("## Training on train data ##")
     model.save_config()
     history = model.train(workers=model_config["workers"])
 
@@ -296,7 +306,7 @@ if __name__ == "__main__":
     print("Validation accuracy:", score[1])
     model.accuracy = np.round(score[1] * 100)
 
-    model.save()
+    model.save(npy=args.npy)
     print("## Model saved ##")
 
     # print('## Predicting ##')
