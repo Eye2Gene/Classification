@@ -17,7 +17,7 @@ docker run --rm -u $(id -u):$(id -g) --gpus all \
   --train-dir ${DATA_DIR}/HEX_baf_v4_train.csv \
   --val-dir ${DATA_DIR}/HEX_baf_v4_val.csv \
   --cfg ./configs/example_config.json \
-  --gpu 0
+  --gpu 0 --workers 16
 
   # optional argument:
   --resume-from ${DATA_DIR}/test_start_weights/03122024-155742-InceptionV3-1e-32bs-0.0001lr.h5

@@ -23,6 +23,9 @@ if __name__ == "__main__":
     
     import os
     os.environ["CUDA_VISIBLE_DEVICES"]=args.gpu
+    
+    for device in tf.config.experimental.list_physical_devices('GPU'):
+        tf.config.experimental.set_memory_growth(device, True)
 
     model_path = args.model
     data_path = args.image_dir

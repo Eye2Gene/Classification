@@ -221,6 +221,8 @@ if __name__ == "__main__":
 
     # Set tf to grow into GPU memory, not pre-allocate
     gpus = tf.config.experimental.list_physical_devices("GPU")
+    for device in gpus:
+        tf.config.experimental.set_memory_growth(device, True)
 
     if len(gpus) == 0:
         print("No GPUs found!")
