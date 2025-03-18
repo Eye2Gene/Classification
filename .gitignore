@@ -5,7 +5,7 @@
 /example_data/
 /work/
 /results/
-/res_output/ #Nextflow output
+/res_output/
 
 *.npy
 *.h5

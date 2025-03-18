@@ -15,7 +15,28 @@ def get_model(name):
 
 def load_model(model_path):
     from models.base import ModelBase
-    model = ModelBase().load(model_path)
+    if model_path.endswith(".h5"):
+        model = ModelBase()
+        model.load(model_path)
+        
+    elif model_path.endswith(".npy"):
+        import json
+        import numpy as np
+        
+        # Load config
+        config_path = model_path.rsplit(".",1)[0] + ".json"
+        with open(config_path, "r") as config_file:
+            model_config = json.load(config_file)
+                
+        #Create model
+        from models import get_model, list_models
+        modelcls = get_model(model_config["model_name"])
+        model = modelcls(model_config)
+        
+        # Load weights
+        model_weights = np.load(model_path, allow_pickle=True)
+        model.model.set_weights(model_weights)
+
     return model
 
 # Dynamically generate the class mapping
