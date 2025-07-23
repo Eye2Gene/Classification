@@ -1,5 +1,5 @@
 # Use an official TensorFlow image as a parent image
-FROM tensorflow/tensorflow:2.10.0-gpu
+FROM tensorflow/tensorflow:2.15.0.post1-gpu
 
 RUN echo "alias ltr='ls -ltr'" >> /etc/bash.bashrc
 
